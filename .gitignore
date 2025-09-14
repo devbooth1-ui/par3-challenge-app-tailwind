@@ -1,0 +1,37 @@
+.vercel
+node_modules/
+# build/cache
+node_modules/
+dist/
+.vite/
+.vercel/
+.DS_Store
+
+# junk/backup you don't want tracked
+par3-challenge-recovered/
+par3backups/
+par3-challenge-app-tailwind/
+working-admin/
+par3-challenge-recovered/
+# never commit these
+node_modules/
+dist/
+.vite/
+.vercel/
+.DS_Store
+par3-admin-dashboard/
+par3backups/
+par3-challenge-recovered/
+working-admin/
+# never commit these
+node_modules/
+dist/
+.vite/
+.vercel/
+.DS_Store
+
+# local/backups we don't want in repo
+par3-admin-dashboard/
+par3backups/
+par3-challenge-recovered/
+working-admin/
