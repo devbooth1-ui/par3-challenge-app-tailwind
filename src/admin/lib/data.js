@@ -6,6 +6,6 @@ export const courses = [
 
 export const players = [
   { id: 101, name: "Jane Golfer", score: "Birdie", reward: "$65 gift card" },
-  { id: 102, name: "John Golfer", score: "Par", reward: "0" },
+  { id: 102, name: "John Golfer", score: "Par", reward: "—" },
   { id: 103, name: "Chris Golfer", score: "Hole in One", reward: "$1000 + Orlando Qualifier" }
 ];

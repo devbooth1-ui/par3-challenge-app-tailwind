@@ -1,3 +1,4 @@
+import React from "react";
 import { players } from "../lib/data";
 
 export default function Players() {

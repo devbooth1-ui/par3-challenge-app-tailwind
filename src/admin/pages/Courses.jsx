@@ -1,3 +1,4 @@
+import React from "react";
 import { courses } from "../lib/data";
 
 export default function Courses() {
