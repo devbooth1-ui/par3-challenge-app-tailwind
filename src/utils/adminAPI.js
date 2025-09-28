@@ -1,7 +1,7 @@
 // API Configuration for connecting to admin services
 const ADMIN_API_BASE = process.env.NODE_ENV === 'production'
-    ? 'https://your-admin-portal.vercel.app' // You'll replace this with your deployed admin URL
-    : 'http://localhost:3001'; // Updated to point to admin dashboard on port 3001
+    ? 'https://par3-admin1.vercel.app' // <-- your actual Vercel admin dashboard URL
+    : 'http://localhost:3001';
 
 // API functions for admin communication
 export const adminAPI = {
@@ -57,7 +57,7 @@ Submitted: ${new Date().toLocaleString()}
 
 Please verify this claim in the admin dashboard immediately!
 
-Admin Dashboard: http://localhost:3001/claims
+Admin Dashboard: https://par3-admin1.vercel.app/claims
                     `
                 })
             });
@@ -124,7 +124,7 @@ Submitted: ${new Date().toLocaleString()}
 *** URGENT VERIFICATION REQUIRED ***
 Please verify this claim in the admin dashboard immediately!
 
-Admin Dashboard: http://localhost:3001/claims
+Admin Dashboard: https://par3-admin1.vercel.app/claims
                     `
                 })
             });
