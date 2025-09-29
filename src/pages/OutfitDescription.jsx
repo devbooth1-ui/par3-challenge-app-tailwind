@@ -63,6 +63,33 @@ export default function OutfitDescription() {
 
       // Always show review/email info after submitting
       alert("Your submission is under review. You will receive an email when your hole has been reviewed by our team.");
+
+      // --- Claim Sync to Backend ---
+      const claimData = {
+        playerName: localStorage.getItem("playerName") || "",
+        playerEmail: localStorage.getItem("playerEmail") || "",
+        playerPhone: localStorage.getItem("playerPhone") || "",
+        courseId: state.courseId || "",
+        hole: state.hole || "",
+        claimType: state.prize === "hio" ? "hole-in-one" : "birdie",
+        teeTime: combinedTeeTime || "",
+        outfit: outfit || "",
+        points: state.points || 0
+      };
+
+      fetch('https://par3-admin1.vercel.app/api/claims', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(claimData)
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Claim submitted to backend:", data);
+      })
+      .catch(error => {
+        console.error("Failed to submit claim to backend:", error);
+      });
+
     } catch (error) {
       console.error("Failed to submit claim to admin portal:", error);
       alert("Prize claim logged! Company notification will be sent immediately.");
