@@ -43,7 +43,7 @@ export default function OutfitDescription() {
     };
 
     try {
-      // Submit claim to admin dashboard with outfit and tee time
+      // Submit claim to admin portal with outfit and tee time
       let claimResult;
       if (isHoleInOne) {
         claimResult = await adminAPI.submitHoleInOneClaim(playerData, paymentMethod, outfit, combinedTeeTime);
@@ -51,12 +51,12 @@ export default function OutfitDescription() {
         claimResult = await adminAPI.submitBirdieClaim(playerData, outfit, combinedTeeTime);
       }
 
-      console.log("🚨 CLAIM SUBMITTED TO ADMIN DASHBOARD:", claimResult);
+      console.log("🚨 CLAIM SUBMITTED TO ADMIN PORTAL:", claimResult);
 
       if (claimResult && !claimResult.error) {
-        alert(`✅ Prize claim submitted to admin dashboard! devbooth1@yahoo.com has been notified immediately.`);
+        alert(`✅ Prize claim submitted! devbooth1@yahoo.com has been notified immediately.`);
       } else if (claimResult && claimResult.offline) {
-        alert(`⚠️ Admin dashboard offline - claim logged locally. Will sync when available.`);
+        alert(`⚠️ Claim logged locally. Will sync with our team when available.`);
       } else {
         alert(`✅ Prize claim submitted! Company will be notified immediately.`);
       }
@@ -64,7 +64,7 @@ export default function OutfitDescription() {
       // Always show review/email info after submitting
       alert("Your submission is under review. You will receive an email when your hole has been reviewed by our team.");
     } catch (error) {
-      console.error("Failed to submit claim to admin dashboard:", error);
+      console.error("Failed to submit claim to admin portal:", error);
       alert("Prize claim logged! Company notification will be sent immediately.");
       alert("Your submission is under review. You will receive an email when your hole has been reviewed by our team.");
     }

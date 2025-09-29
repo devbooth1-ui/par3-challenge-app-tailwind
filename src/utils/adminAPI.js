@@ -1,6 +1,6 @@
 // API Configuration for connecting to admin services
 const ADMIN_API_BASE = process.env.NODE_ENV === 'production'
-    ? 'https://par3-admin1.vercel.app' // <-- your actual Vercel admin dashboard URL
+    ? 'https://par3-admin1.vercel.app' // <-- your actual Vercel admin portal URL
     : 'http://localhost:3001';
 
 // API functions for admin communication
@@ -31,7 +31,7 @@ export const adminAPI = {
             }
 
             const result = await response.json();
-            console.log('🚨 BIRDIE CLAIM SUBMITTED TO ADMIN DASHBOARD:', result);
+            console.log('🚨 BIRDIE CLAIM SUBMITTED:', result);
 
             // Also send immediate email notification
             await fetch(`${ADMIN_API_BASE}/api/send-email`, {
@@ -55,9 +55,9 @@ Course: wentworth-gc
 Hole: 1
 Submitted: ${new Date().toLocaleString()}
 
-Please verify this claim in the admin dashboard immediately!
+Please verify this claim in the admin portal immediately!
 
-Admin Dashboard: https://par3-admin1.vercel.app/claims
+Admin Portal: https://par3-admin1.vercel.app/claims
                     `
                 })
             });
@@ -96,7 +96,7 @@ Admin Dashboard: https://par3-admin1.vercel.app/claims
             }
 
             const result = await response.json();
-            console.log('🚨 HOLE-IN-ONE CLAIM SUBMITTED TO ADMIN DASHBOARD:', result);
+            console.log('🚨 HOLE-IN-ONE CLAIM SUBMITTED:', result);
 
             // Also send immediate email notification
             await fetch(`${ADMIN_API_BASE}/api/send-email`, {
@@ -122,9 +122,9 @@ Payment Method: ${paymentMethod}
 Submitted: ${new Date().toLocaleString()}
 
 *** URGENT VERIFICATION REQUIRED ***
-Please verify this claim in the admin dashboard immediately!
+Please verify this claim in the admin portal immediately!
 
-Admin Dashboard: https://par3-admin1.vercel.app/claims
+Admin Portal: https://par3-admin1.vercel.app/claims
                     `
                 })
             });
