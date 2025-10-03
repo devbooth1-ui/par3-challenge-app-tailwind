@@ -43,7 +43,7 @@ export default function OutfitDescription() {
     };
 
     try {
-      // Submit claim to admin dashboard with outfit and tee time
+      // Submit claim to admin portal with outfit and tee time
       let claimResult;
       if (isHoleInOne) {
         claimResult = await adminAPI.submitHoleInOneClaim(playerData, paymentMethod, outfit, combinedTeeTime);
@@ -51,20 +51,48 @@ export default function OutfitDescription() {
         claimResult = await adminAPI.submitBirdieClaim(playerData, outfit, combinedTeeTime);
       }
 
-      console.log("🚨 CLAIM SUBMITTED TO ADMIN DASHBOARD:", claimResult);
+      console.log("🚨 CLAIM SUBMITTED TO ADMIN PORTAL:", claimResult);
 
       if (claimResult && !claimResult.error) {
-        alert(`✅ Prize claim submitted to admin dashboard! devbooth1@yahoo.com has been notified immediately.`);
+        alert(`✅ Prize claim submitted! devbooth1@yahoo.com has been notified immediately.`);
       } else if (claimResult && claimResult.offline) {
-        alert(`⚠️ Admin dashboard offline - claim logged locally. Will sync when available.`);
+        alert(`⚠️ Claim logged locally. Will sync with our team when available.`);
       } else {
         alert(`✅ Prize claim submitted! Company will be notified immediately.`);
       }
 
       // Always show review/email info after submitting
       alert("Your submission is under review. You will receive an email when your hole has been reviewed by our team.");
+
+      // --- Claim Sync to Backend ---
+      const claimData = {
+        playerName: localStorage.getItem("playerName") || "",
+        playerEmail: localStorage.getItem("playerEmail") || "",
+        playerPhone: localStorage.getItem("playerPhone") || "",
+        courseId: localStorage.getItem("courseId") || state.courseId || "",
+        hole: localStorage.getItem("hole") || state.hole || "",
+        claimType: state.prize === "hio" ? "hole-in-one" : "birdie",
+        teeTime: combinedTeeTime || "",
+        outfit: outfit || "",
+        points: state.points || 0,
+        videoRef: "" // <-- For future video support
+      };
+
+      fetch('https://par3-admin1.vercel.app/api/claims', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(claimData)
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Claim submitted to backend:", data);
+      })
+      .catch(error => {
+        console.error("Failed to submit claim to backend:", error);
+      });
+
     } catch (error) {
-      console.error("Failed to submit claim to admin dashboard:", error);
+      console.error("Failed to submit claim to admin portal:", error);
       alert("Prize claim logged! Company notification will be sent immediately.");
       alert("Your submission is under review. You will receive an email when your hole has been reviewed by our team.");
     }

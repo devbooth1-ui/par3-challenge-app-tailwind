@@ -43,7 +43,6 @@ export default function Home() {
     }
   };
 
-  // ...existing code...
   // Geolocation state
   const [geo, setGeo] = useState({ loading: true, error: null, course: null });
 
@@ -57,10 +56,12 @@ export default function Home() {
         const { latitude, longitude } = pos.coords;
         const course = getCourseInfo(latitude, longitude);
         if (!course) {
-          // Redirect to homepage if no course found
           navigate("/", { replace: true });
         } else {
           setGeo({ loading: false, error: null, course });
+          // Store course info for later use in claim submission
+          localStorage.setItem("courseId", course.name);
+          localStorage.setItem("hole", course.hole || "1");
         }
       },
       (err) => {
@@ -68,8 +69,6 @@ export default function Home() {
       }
     );
   }, [navigate]);
-
-  // ...existing code...
 
   return (
     <div className="relative min-h-screen flex flex-col justify-start items-center overflow-hidden text-white">
@@ -147,8 +146,8 @@ export default function Home() {
             <ul className="text-white/80 text-sm sm:text-base font-medium list-disc pl-4 space-y-2">
               <li>Login, pay entry, $8 and tee off.</li>
               <li>Follow all prompts for verification.</li>
-              <li><span className="font-bold text-lime-200">Birdie</span> wins <span className="font-bold">$65</span> + <span className="font-bold">200 points</span></li>
-              <li><span className="font-bold text-yellow-300">Hole in One</span> wins <span className="font-bold">$1000</span> + <span className="font-bold">Instant qualify for $1M shootout</span></li>
+              <li><span className="font-bold text-lime-200">Birdie</span> wins <span className="font-bold">$65</span> + <span className="font-bold">200 towards $1Million Shootout</span></li>
+              <li><span className="font-bold text-yellow-300">Hole in One</span> wins <span className="font-bold">$1000</span> + <span className="font-bold">Instant qualify for $1M Shootout</span></li>
             </ul>
           </div>
         </div>

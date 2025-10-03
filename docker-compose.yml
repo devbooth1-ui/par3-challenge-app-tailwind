@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  admin1:
+    build: ~/Desktop/par3-admin1
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+    volumes:
+      - ~/Desktop/par3-admin1:/app
+  tailwind:
+    build: ./
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./:/app
+    command: npm run dev

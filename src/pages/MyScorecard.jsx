@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PRIZE_CONFIG } from "../config/prizes";
@@ -166,7 +165,9 @@ export default function MyScorecard() {
                 <div className="bg-blue-100 rounded-lg p-4 text-sm text-blue-700">
                   <h4 className="font-semibold mb-2">Verification & Payment</h4>
                   <p className="ml-2">• Typical verification for the Birdie prize up to 1 hour</p>
-                  <p className="ml-2">• Prize will be pushed through the Pro Shop or app with ClubCard<span style={{ fontSize: '0.8em', verticalAlign: 'super' }}>™</span></p>
+                  <p className="ml-2">• Prize will be delivered as a ClubCard<sup>™</sup> QR code, redeemable exclusively at the participating club where your award was claimed.</p>
+                  <p className="ml-2">• Simply present your ClubCard<sup>™</sup> QR code at checkout for credit against purchases.</p>
+                  <p className="ml-2">• The ClubCard<sup>™</sup> is not transferrable to cash or any other golf club.</p>
                 </div>
               </div>
             )}
@@ -198,12 +199,6 @@ export default function MyScorecard() {
           {/* Tournament Details Link - Only show after prize claims */}
           {(prize === "hio" || prize === "birdie") && (
             <div className="mt-6 text-center">
-              <button
-                onClick={() => navigate('/tournament')}
-                className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold py-3 px-6 rounded-lg mb-4"
-              >
-                🏆 View Tournament Details
-              </button>
               <p className="text-sm text-slate-500">
                 Redirecting to home in {autoRedirectTimer} seconds...
               </p>
