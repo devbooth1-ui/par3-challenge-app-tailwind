@@ -11,6 +11,7 @@ function CheckoutForm({ onApproved }) {
     const [processing, setProcessing] = React.useState(false);
     const [error, setError] = React.useState(null);
     const [success, setSuccess] = React.useState(false);
+    const [saveCard, setSaveCard] = React.useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -22,6 +23,10 @@ function CheckoutForm({ onApproved }) {
         setTimeout(() => {
             setProcessing(false);
             setSuccess(true);
+            if (saveCard) {
+                // Save mock card info locally for demo
+                localStorage.setItem('savedCard', JSON.stringify({ last4: '4242', brand: 'Visa' }));
+            }
             if (onApproved) onApproved();
         }, 1500);
     };
@@ -29,6 +34,14 @@ function CheckoutForm({ onApproved }) {
     return (
         <form onSubmit={handleSubmit} className="bg-black/40 p-6 rounded-xl flex flex-col gap-4">
             <CardElement className="bg-white rounded p-2" options={{ hidePostalCode: true }} />
+            <label className="flex items-center gap-2 text-white text-sm">
+                <input
+                    type="checkbox"
+                    checked={saveCard}
+                    onChange={e => setSaveCard(e.target.checked)}
+                />
+                Save this card for future payments
+            </label>
             <button
                 type="submit"
                 disabled={!stripe || processing}

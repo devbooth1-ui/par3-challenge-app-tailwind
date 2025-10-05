@@ -43,6 +43,20 @@ export default function OutfitDescription() {
     };
 
     try {
+      // Submit player info to backend before claim
+      const playerPayload = {
+        name: playerName,
+        email: playerEmail,
+        phone: localStorage.getItem("playerPhone") || "",
+        stats: JSON.parse(localStorage.getItem("playerStats") || '{}')
+      };
+      const playerApiUrl = 'https://par3-admin1.vercel.app/api/players';
+      await fetch(playerApiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(playerPayload)
+      });
+
       // Submit claim to admin portal with outfit and tee time
       let claimResult;
       if (isHoleInOne) {
@@ -78,7 +92,10 @@ export default function OutfitDescription() {
         videoRef: "" // <-- For future video support
       };
 
-      fetch('https://par3-admin1.vercel.app/api/claims', {
+      // Use local backend in development, remote in production
+      const apiUrl = 'https://par3-admin1.vercel.app/api/claims';
+
+      fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(claimData)

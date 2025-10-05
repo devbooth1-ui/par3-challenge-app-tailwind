@@ -1,7 +1,5 @@
 // API Configuration for connecting to admin services
-const ADMIN_API_BASE = process.env.NODE_ENV === 'production'
-    ? 'https://par3-admin1.vercel.app' // <-- your actual Vercel admin portal URL
-    : 'http://localhost:3001';
+const ADMIN_API_BASE = 'https://par3-admin1.vercel.app';
 
 // API functions for admin communication
 export const adminAPI = {
