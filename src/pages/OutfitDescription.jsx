@@ -13,6 +13,7 @@ export default function OutfitDescription() {
   const [courseId, setCourseId] = useState("");
   const [hole, setHole] = useState("");
   const [points, setPoints] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -35,6 +36,9 @@ export default function OutfitDescription() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     const combinedTeeTime = `${teeDate} ${teeTime}`;
 
     let playerName = "Unknown Player";
@@ -126,6 +130,7 @@ export default function OutfitDescription() {
       alert("Prize claim logged! Company notification will be sent immediately.");
       alert("Your submission is under review. You will receive an email when your hole has been reviewed by our team.");
     }
+    setIsSubmitting(false);
 
     const isQualified = playerStats.tournamentQualified || (playerStats.totalPoints >= 800);
     const isRegistered = playerStats.tournamentRegistered;
@@ -234,8 +239,10 @@ export default function OutfitDescription() {
           <button
             type="submit"
             className="w-full mt-2 px-4 py-3 sm:px-6 sm:py-4 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold rounded-xl transition-all duration-300 shadow-lg text-base sm:text-lg"
+            disabled={isSubmitting}
+            style={isSubmitting ? { opacity: 0.6, cursor: 'not-allowed' } : {}}
           >
-            Submit for Verification
+            {isSubmitting ? 'Submitting...' : 'Submit for Verification'}
           </button>
         </form>
         {/* Footer */}
