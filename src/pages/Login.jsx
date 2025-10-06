@@ -1,25 +1,25 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import VideoRecordingNotice from "../components/VideoRecordingNotice";
 
 export default function Login() {
-  const navigate = useNavigate();
-  const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [phone, setPhone] = React.useState("");
-  const [agreeToTerms, setAgreeToTerms] = React.useState(false);
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [isReturningPlayer, setIsReturningPlayer] = useState(false);
 
-  // Check if terms were already accepted from Terms page
-  React.useEffect(() => {
-    const termsAccepted = localStorage.getItem("termsAccepted");
-    if (termsAccepted === "true") {
-      setAgreeToTerms(true);
-      localStorage.removeItem("termsAccepted"); // Clean up
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const termsAccepted = localStorage.getItem("termsAccepted");
+      if (termsAccepted === "true") {
+        setAgreeToTerms(true);
+        localStorage.removeItem("termsAccepted");
+      }
+      setIsReturningPlayer(!!localStorage.getItem("playerStats"));
     }
   }, []);
-
-  // Check if this is a returning player
-  const isReturningPlayer = !!localStorage.getItem("playerStats");
 
   const capitalizeWords = (str) => {
     return str.replace(/\b\w/g, l => l.toUpperCase());
@@ -32,35 +32,30 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Check terms agreement for new players
     if (!agreeToTerms) {
       alert("Please agree to the terms and conditions to continue.");
       return;
     }
-    
-    localStorage.setItem("playerName", name);
-    localStorage.setItem("playerEmail", email);
-    localStorage.setItem("playerPhone", phone);
-
-    // Check if playerStats already exists (returning player)
-    const existingStats = localStorage.getItem("playerStats");
-    if (!existingStats) {
-      // New player: set up stats and go to awards
-      const initialStats = {
-        lastRound: "Par",
-        totalRounds: 0,
-        bestScore: 99,
-        totalPoints: 50,
-        lastReward: "Welcome Bonus",
-        lastDate: new Date().toLocaleDateString(),
-        holeInOneQualified: false
-      };
-      localStorage.setItem("playerStats", JSON.stringify(initialStats));
-      navigate("/awards");
-    } else {
-      // Returning player: go to play page
-      navigate("/play");
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("playerName", name);
+      localStorage.setItem("playerEmail", email);
+      localStorage.setItem("playerPhone", phone);
+      const existingStats = localStorage.getItem("playerStats");
+      if (!existingStats) {
+        const initialStats = {
+          lastRound: "Par",
+          totalRounds: 0,
+          bestScore: 99,
+          totalPoints: 50,
+          lastReward: "Welcome Bonus",
+          lastDate: new Date().toLocaleDateString(),
+          holeInOneQualified: false
+        };
+        localStorage.setItem("playerStats", JSON.stringify(initialStats));
+        router.push("/awards");
+      } else {
+        router.push("/play");
+      }
     }
   };
 
@@ -156,7 +151,7 @@ export default function Login() {
                 <button 
                   type="button"
                   className="underline text-lime-300 hover:text-lime-200"
-                  onClick={() => navigate('/terms')}
+                  onClick={() => router.push('/terms')}
                 >
                   terms and conditions
                 </button>

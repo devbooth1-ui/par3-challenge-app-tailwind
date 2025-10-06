@@ -1,6 +1,5 @@
-
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 
 const awards = [
@@ -19,7 +18,7 @@ const awards = [
 ];
 
 export default function Awards() {
-  const navigate = useNavigate();
+  const router = useRouter();
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center relative px-2 sm:px-0 overflow-hidden"
@@ -56,13 +55,13 @@ export default function Awards() {
       <div className="flex flex-col gap-2 mt-4 justify-center relative z-10 w-full max-w-md px-1 sm:px-2">
         <button
           className="px-3 py-1.5 sm:px-4 bg-blue-600 text-white rounded-lg font-semibold shadow hover:bg-blue-700 transition text-sm sm:text-base"
-          onClick={() => navigate("/tournament")}
+          onClick={() => router.push("/tournament")}
         >
           Tournament Details
         </button>
         <button
           className="px-4 py-2 sm:px-6 bg-green-600 text-white rounded-xl font-bold shadow hover:bg-green-700 transition text-base sm:text-lg mt-2"
-          onClick={() => navigate("/payment")}
+          onClick={() => router.push("/payment")}
         >
           Tee it up!
         </button>

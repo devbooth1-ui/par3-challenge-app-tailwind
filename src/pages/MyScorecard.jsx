@@ -1,26 +1,27 @@
-
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import { PRIZE_CONFIG } from "../config/prizes";
 
 export default function MyScorecard() {
-  const { state } = useLocation();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [playerStats, setPlayerStats] = useState({});
-  const prize = state?.prize ?? null;
+  const [prize, setPrize] = useState(null);
   const [autoRedirectTimer, setAutoRedirectTimer] = useState(15);
 
   useEffect(() => {
-    const stats = JSON.parse(localStorage.getItem("playerStats") || "{}");
-    setPlayerStats(stats);
-  }, []);
+    if (typeof window !== 'undefined') {
+      const stats = JSON.parse(localStorage.getItem("playerStats") || "{}");
+      setPlayerStats(stats);
+      setPrize(router.query.prize ?? null);
+    }
+  }, [router.query]);
 
   // Auto-redirect timer after 15 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setAutoRedirectTimer((prev) => {
         if (prev <= 1) {
-          navigate("/");
+          router.push("/");
           return 0;
         }
         return prev - 1;
@@ -28,7 +29,7 @@ export default function MyScorecard() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [navigate]);
+  }, [router]);
 
   const isQualified = playerStats.tournamentQualified || (playerStats.totalPoints >= 800);
   const isRegistered = playerStats.tournamentRegistered;
@@ -38,11 +39,11 @@ export default function MyScorecard() {
     if (showSeeYou) {
       const timer = setTimeout(() => {
         setShowSeeYou(false);
-        navigate("/");
+        router.push("/");
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [showSeeYou, navigate]);
+  }, [showSeeYou, router]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-lime-100 flex flex-col items-center justify-center p-8 overflow-hidden" style={{ minHeight: '100dvh' }}>
@@ -78,7 +79,7 @@ export default function MyScorecard() {
                         You have {playerStats.totalPoints || 0} points - enough to enter the $1 Million Tournament!
                       </p>
                       <button
-                        onClick={() => navigate('/tournament-signup')}
+                        onClick={() => router.push('/tournament-signup')}
                         className="bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 text-white font-bold py-3 px-6 rounded-xl text-lg shadow-lg hover:from-yellow-600 hover:via-orange-600 hover:to-red-600 transform hover:scale-105 transition-all duration-300"
                       >
                         🏆 REGISTER FOR TOURNAMENT 🏆
@@ -115,7 +116,7 @@ export default function MyScorecard() {
                       ></div>
                     </div>
                     <button
-                      onClick={() => navigate('/play')}
+                      onClick={() => router.push('/play')}
                       className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold py-2 px-4 rounded-lg"
                     >
                       Keep Playing to Qualify!
@@ -184,7 +185,7 @@ export default function MyScorecard() {
           {(!prize || (prize !== "hio" && prize !== "birdie")) && (
             <div className="mt-6 text-center">
               <button
-                onClick={() => navigate('/order-form')}
+                onClick={() => router.push('/order-form')}
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-lg mb-4 shadow-lg transition-all transform hover:scale-105"
               >
                 🎥 Order Your Par3 Challenge Video - $25
@@ -199,7 +200,7 @@ export default function MyScorecard() {
           {(prize === "hio" || prize === "birdie") && (
             <div className="mt-6 text-center">
               <button
-                onClick={() => navigate('/tournament')}
+                onClick={() => router.push('/tournament')}
                 className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold py-3 px-6 rounded-lg mb-4"
               >
                 🏆 View Tournament Details
