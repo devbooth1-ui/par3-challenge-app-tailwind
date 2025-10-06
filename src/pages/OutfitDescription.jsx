@@ -8,17 +8,21 @@ export default function OutfitDescription() {
   const [outfit, setOutfit] = useState("");
   const [teeDate, setTeeDate] = useState("");
   const [teeTime, setTeeTime] = useState("");
+  const [playerName, setPlayerName] = useState("Player");
+  const [prize, setPrize] = useState("");
+  const [courseId, setCourseId] = useState("");
+  const [hole, setHole] = useState("");
+  const [points, setPoints] = useState(0);
 
-  // Get playerName from localStorage
-  const playerName = localStorage.getItem("playerName") || "Player";
-  const firstName = playerName.split(" ")[0];
-  const capitalizedFirstName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
-
-  // Get prize and other info from query or localStorage
-  const prize = router.query.prize || localStorage.getItem("prize");
-  const courseId = router.query.courseId || localStorage.getItem("courseId") || "";
-  const hole = router.query.hole || localStorage.getItem("hole") || "";
-  const points = router.query.points || localStorage.getItem("points") || 0;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setPlayerName(localStorage.getItem("playerName") || "Player");
+      setPrize(router.query.prize || localStorage.getItem("prize") || "");
+      setCourseId(router.query.courseId || localStorage.getItem("courseId") || "");
+      setHole(router.query.hole || localStorage.getItem("hole") || "");
+      setPoints(Number(router.query.points || localStorage.getItem("points") || 0));
+    }
+  }, [router.query]);
 
   useEffect(() => {
     if (!prize) router.replace("/howd-we-do");
@@ -26,14 +30,25 @@ export default function OutfitDescription() {
 
   if (!prize) return null;
 
+  const firstName = playerName.split(" ")[0];
+  const capitalizedFirstName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const combinedTeeTime = `${teeDate} ${teeTime}`;
 
-    // Get player info
-    const playerName = localStorage.getItem("playerName") || "Unknown Player";
-    const playerEmail = localStorage.getItem("playerEmail") || "No email provided";
-    const paymentMethod = localStorage.getItem("lastPaymentMethod") || "card";
+    let playerName = "Unknown Player";
+    let playerEmail = "No email provided";
+    let paymentMethod = "card";
+    let playerPhone = "";
+    let playerStats = {};
+    if (typeof window !== "undefined") {
+      playerName = localStorage.getItem("playerName") || "Unknown Player";
+      playerEmail = localStorage.getItem("playerEmail") || "No email provided";
+      paymentMethod = localStorage.getItem("lastPaymentMethod") || "card";
+      playerPhone = localStorage.getItem("playerPhone") || "";
+      playerStats = JSON.parse(localStorage.getItem("playerStats") || "{}");
+    }
 
     const nameparts = playerName.split(" ");
     const firstName = nameparts[0] || "Player";
@@ -43,16 +58,15 @@ export default function OutfitDescription() {
       firstName,
       lastName,
       email: playerEmail,
-      phone: "", // You can add phone collection in your app later
+      phone: "",
     };
 
     try {
-      // Submit player info to backend before claim
       const playerPayload = {
         name: playerName,
         email: playerEmail,
-        phone: localStorage.getItem("playerPhone") || "",
-        stats: JSON.parse(localStorage.getItem("playerStats") || '{}')
+        phone: playerPhone,
+        stats: playerStats
       };
       const playerApiUrl = 'https://par3-admin1.vercel.app/api/players';
       await fetch(playerApiUrl, {
@@ -61,7 +75,6 @@ export default function OutfitDescription() {
         body: JSON.stringify(playerPayload)
       });
 
-      // Submit claim to admin portal with outfit and tee time
       let claimResult;
       if (prize === "hio") {
         claimResult = await adminAPI.submitHoleInOneClaim(playerData, paymentMethod, outfit, combinedTeeTime);
@@ -79,21 +92,19 @@ export default function OutfitDescription() {
         alert(`✅ Prize claim submitted! Company will be notified immediately.`);
       }
 
-      // Always show review/email info after submitting
       alert("Your submission is under review. You will receive an email when your hole has been reviewed by our team.");
 
-      // --- Claim Sync to Backend ---
       const claimData = {
-        playerName: localStorage.getItem("playerName") || "",
-        playerEmail: localStorage.getItem("playerEmail") || "",
-        playerPhone: localStorage.getItem("playerPhone") || "",
+        playerName,
+        playerEmail,
+        playerPhone,
         courseId,
         hole,
         claimType: prize === "hio" ? "hole-in-one" : "birdie",
         teeTime: combinedTeeTime || "",
         outfit: outfit || "",
         points: points || 0,
-        videoRef: "" // <-- For future video support
+        videoRef: ""
       };
 
       const apiUrl = 'https://par3-admin1.vercel.app/api/claims';
@@ -117,8 +128,6 @@ export default function OutfitDescription() {
       alert("Your submission is under review. You will receive an email when your hole has been reviewed by our team.");
     }
 
-    // Check tournament qualification after submitting
-    const playerStats = JSON.parse(localStorage.getItem("playerStats") || "{}");
     const isQualified = playerStats.tournamentQualified || (playerStats.totalPoints >= 800);
     const isRegistered = playerStats.tournamentRegistered;
 
@@ -156,10 +165,8 @@ export default function OutfitDescription() {
     >
       {/* Confetti for Birdie or Hole-in-Won */}
       {(prize === "hio" || prize === "birdie") && <ConfettiEffect duration={3000} />}
-
       {/* Premium overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-green-900/40 via-emerald-800/30 to-lime-700/40"></div>
-
       <div className="relative z-10 w-full max-w-sm sm:max-w-md bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-4 sm:p-6 border border-emerald-200 mx-auto my-4 flex flex-col justify-between min-h-[80svh] overflow-y-auto">
         {/* Congratulations Header */}
         <div className="text-center mb-4">
@@ -176,7 +183,6 @@ export default function OutfitDescription() {
             Let's get some details for recognition and verification.
           </p>
         </div>
-
         <form onSubmit={onSubmit} className="flex flex-col gap-3 flex-1 justify-between">
           {/* Outfit Description */}
           <div className="space-y-1">
@@ -193,7 +199,6 @@ export default function OutfitDescription() {
               style={{ fontSize: 16 }}
             />
           </div>
-
           {/* Date and Time */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div className="space-y-1">
@@ -234,7 +239,6 @@ export default function OutfitDescription() {
             Submit for Verification
           </button>
         </form>
-
         {/* Footer */}
         <div className="mt-3 text-center pb-2">
           <p className="text-xs text-slate-500">
