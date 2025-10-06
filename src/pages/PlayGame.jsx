@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import VideoRecordingNotice from "../components/VideoRecordingNotice";
 
 export default function PlayGame() {
   const router = useRouter();
+  const [fullName, setFullName] = useState("Player");
+  const [savedStats, setSavedStats] = useState({});
 
-  // Get player info
-  const fullName = router.query.name || localStorage.getItem("playerName") || "Player";
-  const firstName = fullName.split(" ")[0]?.charAt(0).toUpperCase() + fullName.split(" ")[0]?.slice(1).toLowerCase();
-
-  // Get stats
-  const savedStats = JSON.parse(localStorage.getItem("playerStats") || "{}");
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setFullName(router.query.name || localStorage.getItem("playerName") || "Player");
+      setSavedStats(JSON.parse(localStorage.getItem("playerStats") || "{}"));
+    }
+  }, [router.query.name]);
 
   // Scorecard/progress
   const playerStats = {
@@ -27,6 +29,9 @@ export default function PlayGame() {
     const percentage = Math.min((totalPoints / 800) * 100, 100);
     return { totalPoints, percentage, pointsNeeded: Math.max(800 - totalPoints, 0) };
   };
+
+  // Capitalize first letter of first name
+  const firstName = fullName.split(" ")[0]?.charAt(0).toUpperCase() + fullName.split(" ")[0]?.slice(1).toLowerCase();
 
   return (
     <div

@@ -14,15 +14,17 @@ export default function TournamentSignup() {
     const [showConfetti, setShowConfetti] = useState(false);
 
     useEffect(() => {
-        const playerName = localStorage.getItem("playerName") || "";
-        const playerEmail = localStorage.getItem("playerEmail") || "";
-        const playerPhone = localStorage.getItem("playerPhone") || "";
-        
-        setForm({
-            name: playerName,
-            email: playerEmail,
-            phone: playerPhone
-        });
+        if (typeof window !== 'undefined') {
+            const playerName = localStorage.getItem("playerName") || "";
+            const playerEmail = localStorage.getItem("playerEmail") || "";
+            const playerPhone = localStorage.getItem("playerPhone") || "";
+            
+            setForm({
+                name: playerName,
+                email: playerEmail,
+                phone: playerPhone
+            });
+        }
     }, []);
 
     const handleChange = (e) => {
@@ -45,17 +47,16 @@ export default function TournamentSignup() {
             status: "registered"
         };
         
-        localStorage.setItem("tournamentRegistered", "true");
-        localStorage.setItem("tournamentData", JSON.stringify(tournamentData));
-        
-        const playerStats = JSON.parse(localStorage.getItem("playerStats") || "{}");
-        playerStats.tournamentRegistered = true;
-        localStorage.setItem("playerStats", JSON.stringify(playerStats));
-        
-        // Also update the main player data if it was modified
-        if (form.name) localStorage.setItem("playerName", form.name);
-        if (form.email) localStorage.setItem("playerEmail", form.email);
-        if (form.phone) localStorage.setItem("playerPhone", form.phone);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem("tournamentRegistered", "true");
+            localStorage.setItem("tournamentData", JSON.stringify(tournamentData));
+            const playerStats = JSON.parse(localStorage.getItem("playerStats") || "{}");
+            playerStats.tournamentRegistered = true;
+            localStorage.setItem("playerStats", JSON.stringify(playerStats));
+            if (form.name) localStorage.setItem("playerName", form.name);
+            if (form.email) localStorage.setItem("playerEmail", form.email);
+            if (form.phone) localStorage.setItem("playerPhone", form.phone);
+        }
 
         // Send registration notification using the notification service
         try {
@@ -133,8 +134,10 @@ This is an automated confirmation. Please keep this email for your records.`,
             type: "tournament_registration"
         };
 
-        // Store for demonstration (in production, this would send actual email)
-        localStorage.setItem("lastPlayerTournamentConfirmation", JSON.stringify(playerConfirmation));
+        if (typeof window !== 'undefined') {
+            // Store for demonstration (in production, this would send actual email)
+            localStorage.setItem("lastPlayerTournamentConfirmation", JSON.stringify(playerConfirmation));
+        }
         console.log("Tournament registration confirmation sent to player:", playerConfirmation);
     };
 
@@ -164,8 +167,10 @@ Action Required: Monitor player's tournament performance and verify results.`,
             type: "company_tournament_notification"
         };
 
-        // Store for demonstration (in production, this would send actual email)
-        localStorage.setItem("lastCompanyTournamentNotification", JSON.stringify(companyNotification));
+        if (typeof window !== 'undefined') {
+            // Store for demonstration (in production, this would send actual email)
+            localStorage.setItem("lastCompanyTournamentNotification", JSON.stringify(companyNotification));
+        }
         console.log("Company tournament notification sent:", companyNotification);
     };
 

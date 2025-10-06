@@ -1,8 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 export default function HowToPlay() {
-    const navigate = useNavigate();
+    const router = useRouter();
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center px-4 py-8 overflow-hidden" style={{ backgroundImage: "url(/golf-grass.jpg)", minHeight: '100dvh' }}>
             <div className="bg-white/90 rounded-2xl shadow-xl p-6 max-w-md w-full mx-auto text-center">
@@ -16,13 +16,13 @@ export default function HowToPlay() {
                 </ol>
                 <div className="flex flex-col gap-3">
                     <button
-                        onClick={() => navigate("/login")}
+                        onClick={() => router.push("/login")}
                         className="w-full bg-lime-600 hover:bg-lime-700 text-white font-bold py-3 rounded-lg shadow-lg transition-all text-lg"
                     >
                         Get Started
                     </button>
                     <button
-                        onClick={() => navigate("/")}
+                        onClick={() => router.push("/")}
                         className="w-full bg-white border border-lime-400 text-lime-700 font-semibold py-2 rounded-lg hover:bg-lime-50 transition-all text-base"
                     >
                         Back to Home

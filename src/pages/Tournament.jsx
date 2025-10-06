@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 
 export default function Tournament() {
   const videoRef = React.useRef(null);
   const router = useRouter();
+  const [playerName, setPlayerName] = React.useState("Player");
+  const [savedStats, setSavedStats] = React.useState({});
 
-  // Get player stats from localStorage for personalization
-  const playerName = localStorage.getItem("playerName") || "Player";
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setPlayerName(localStorage.getItem("playerName") || "Player");
+      setSavedStats(JSON.parse(localStorage.getItem("playerStats") || "{}"));
+    }
+  }, []);
+
   const firstName = playerName.split(" ")[0];
-  const savedStats = JSON.parse(localStorage.getItem("playerStats") || "{}");
   const currentPoints = savedStats.totalPoints || 50; // Default to 50 to match PlayGame page
   const needed = Math.max(0, 800 - currentPoints);
 

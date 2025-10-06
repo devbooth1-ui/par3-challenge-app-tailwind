@@ -6,12 +6,14 @@ export default function TournamentConfirmation() {
     const [registrationData, setRegistrationData] = useState(null);
 
     useEffect(() => {
-        const data = JSON.parse(localStorage.getItem("tournamentRegistration") || "null");
-        if (!data) {
-            router.push("/tournament-signup");
-            return;
+        if (typeof window !== 'undefined') {
+            const data = JSON.parse(localStorage.getItem("tournamentRegistration") || "null");
+            if (!data) {
+                router.push("/tournament-signup");
+                return;
+            }
+            setRegistrationData(data);
         }
-        setRegistrationData(data);
     }, [router]);
 
     if (!registrationData) {

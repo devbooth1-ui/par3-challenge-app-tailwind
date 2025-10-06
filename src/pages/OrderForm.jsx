@@ -14,21 +14,23 @@ export default function OrderForm() {
   const [cardApproved, setCardApproved] = useState(false);
 
   // Get last payment method for returning players
-  const lastPaymentMethod = localStorage.getItem("lastPaymentMethod");
-  const isReturningPlayer = localStorage.getItem("isReturningPlayer") === "true";
+  const lastPaymentMethod = typeof window !== 'undefined' ? localStorage.getItem("lastPaymentMethod") : null;
+  const isReturningPlayer = typeof window !== 'undefined' ? localStorage.getItem("isReturningPlayer") === "true" : false;
 
   // Populate form with existing player data
   useEffect(() => {
-    const playerName = localStorage.getItem("playerName") || "";
-    const playerEmail = localStorage.getItem("playerEmail") || "";
-    const playerPhone = localStorage.getItem("playerPhone") || "";
-    
-    setFormData(prev => ({
-      ...prev,
-      playerName,
-      email: playerEmail,
-      phone: playerPhone
-    }));
+    if (typeof window !== 'undefined') {
+      const playerName = localStorage.getItem("playerName") || "";
+      const playerEmail = localStorage.getItem("playerEmail") || "";
+      const playerPhone = localStorage.getItem("playerPhone") || "";
+      
+      setFormData(prev => ({
+        ...prev,
+        playerName,
+        email: playerEmail,
+        phone: playerPhone
+      }));
+    }
   }, []);
 
   const handleInputChange = (e) => {
@@ -67,9 +69,9 @@ export default function OrderForm() {
       status: "confirmed",
       orderType: "video"
     };
-
-    // Store order data
-    localStorage.setItem("videoOrder", JSON.stringify(orderData));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("videoOrder", JSON.stringify(orderData));
+    }
 
     // Send notification using the notification service
     try {
@@ -112,7 +114,9 @@ Note: Video will be delivered via email attachment to customer's email address.`
     };
 
     // Store for demonstration (in production, this would send actual email)
-    localStorage.setItem("lastNotification", JSON.stringify(notification));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("lastNotification", JSON.stringify(notification));
+    }
     console.log("Order notification sent to devbooth1@yahoo.com and video@par3challenge.com", notification);
   };
 
@@ -133,7 +137,9 @@ Thank you for playing Par3 Challenge!`,
       timestamp: new Date().toISOString()
     };
 
-    localStorage.setItem("lastCustomerConfirmation", JSON.stringify(confirmation));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("lastCustomerConfirmation", JSON.stringify(confirmation));
+    }
     console.log("Customer confirmation sent", confirmation);
   };
 

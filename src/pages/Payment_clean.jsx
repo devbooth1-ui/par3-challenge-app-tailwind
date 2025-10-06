@@ -4,7 +4,14 @@ import { useRouter } from "next/router";
 export default function Payment() {
     const router = useRouter();
     const [paymentMethod, setPaymentMethod] = useState("");
-    const playerName = localStorage.getItem("playerName") || "Player";
+    const [playerName, setPlayerName] = useState("Player");
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setPlayerName(localStorage.getItem("playerName") || "Player");
+        }
+    }, []);
+
     const firstName = playerName.split(" ")[0];
 
     const handleSwingAway = () => {

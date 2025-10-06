@@ -10,48 +10,44 @@ export default function ReturningPlayer() {
   const [showWelcomeAnimation, setShowWelcomeAnimation] = useState(false);
 
   useEffect(() => {
-    const savedName = localStorage.getItem("playerName");
-    const savedStats = JSON.parse(localStorage.getItem("playerStats") || "{}");
-
-    if (savedName) {
-      setPlayerName(savedName);
-      setPlayerStats(savedStats);
-      setRecognized(true);
-      setShowWelcomeAnimation(true);
-
-      // Hide animation after 3 seconds
-      setTimeout(() => {
-        setShowWelcomeAnimation(false);
-      }, 3000);
+    if (typeof window !== 'undefined') {
+      const savedName = localStorage.getItem("playerName");
+      const savedStats = JSON.parse(localStorage.getItem("playerStats") || "{}");
+      if (savedName) {
+        setPlayerName(savedName);
+        setPlayerStats(savedStats);
+        setRecognized(true);
+        setShowWelcomeAnimation(true);
+        setTimeout(() => {
+          setShowWelcomeAnimation(false);
+        }, 3000);
+      }
     }
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem("playerName", playerName);
-    localStorage.setItem("playerEmail", email);
-
-    // Initialize empty stats for new returning player
-    const initialStats = {
-      totalRounds: 0,
-      totalPoints: 0,
-      bestScore: null,
-      lastRound: null,
-      lastReward: null,
-      lastDate: null,
-      tournamentQualified: false,
-      tournamentRegistered: false
-    };
-
-    localStorage.setItem("playerStats", JSON.stringify(initialStats));
-    setPlayerStats(initialStats);
-    setRecognized(true);
-    setShowWelcomeAnimation(true);
-
-    // Hide animation after 3 seconds
-    setTimeout(() => {
-      setShowWelcomeAnimation(false);
-    }, 3000);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("playerName", playerName);
+      localStorage.setItem("playerEmail", email);
+      const initialStats = {
+        totalRounds: 0,
+        totalPoints: 0,
+        bestScore: null,
+        lastRound: null,
+        lastReward: null,
+        lastDate: null,
+        tournamentQualified: false,
+        tournamentRegistered: false
+      };
+      localStorage.setItem("playerStats", JSON.stringify(initialStats));
+      setPlayerStats(initialStats);
+      setRecognized(true);
+      setShowWelcomeAnimation(true);
+      setTimeout(() => {
+        setShowWelcomeAnimation(false);
+      }, 3000);
+    }
   };
 
   // Calculate tournament progress

@@ -8,18 +8,27 @@ export default function Payment() {
     const [showTapToPay, setShowTapToPay] = useState(false);
     const [showCardForm, setShowCardForm] = useState(false);
     const [cardInfo, setCardInfo] = useState({ number: "", expiry: "", cvv: "", name: "" });
-    const playerName = localStorage.getItem("playerName") || "Player";
+    const [playerName, setPlayerName] = useState("Player");
+    const [lastPaymentMethod, setLastPaymentMethod] = useState("");
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setPlayerName(localStorage.getItem("playerName") || "Player");
+            setLastPaymentMethod(localStorage.getItem("lastPaymentMethod") || "");
+        }
+    }, []);
+
     const firstName = playerName.split(" ")[0];
 
     // Get last payment method
-    const lastPaymentMethod = localStorage.getItem("lastPaymentMethod");
+    const storedLastPaymentMethod = typeof window !== 'undefined' ? localStorage.getItem("lastPaymentMethod") : null;
 
     useEffect(() => {
         // Auto-select last payment method if available
-        if (lastPaymentMethod && !paymentMethod) {
+        if (storedLastPaymentMethod && !paymentMethod) {
             setPaymentMethod("same");
         }
-    }, [lastPaymentMethod, paymentMethod]);
+    }, [storedLastPaymentMethod, paymentMethod]);
 
     const handleSwingAway = () => {
         router.push("/howd-we-do");
@@ -30,16 +39,15 @@ export default function Payment() {
             alert("Please select a payment method");
             return;
         }
-
         if (paymentMethod === "card" && !showCardForm) {
             setShowCardForm(true);
             return;
         }
-
         // Store payment method for next time
         const selectedMethod = paymentMethod === "same" ? lastPaymentMethod : paymentMethod;
-        localStorage.setItem("lastPaymentMethod", selectedMethod);
-
+        if (typeof window !== 'undefined') {
+            localStorage.setItem("lastPaymentMethod", selectedMethod);
+        }
         // Simulate payment processing
         setTimeout(() => {
             // After payment, go to scoring page

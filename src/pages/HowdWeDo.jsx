@@ -1,46 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useRouter } from "next/router";
 import { adminAPI } from "../utils/adminAPI";
 
 export default function HowdWeDo() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
   const [showVideoOrder, setShowVideoOrder] = useState(false);
   const [videoOrderData, setVideoOrderData] = useState(null);
+  const [playerName, setPlayerName] = useState("Player");
+  const [currentStats, setCurrentStats] = useState({});
 
   // Check for video order query param and data
   useEffect(() => {
-    const videoOrderParam = searchParams.get('videoOrder');
-    if (videoOrderParam === 'true') {
-      const orderData = localStorage.getItem('videoOrder');
-      if (orderData) {
-        setVideoOrderData(JSON.parse(orderData));
-        setShowVideoOrder(true);
+    if (typeof window !== 'undefined') {
+      const videoOrderParam = router.query.videoOrder;
+      if (videoOrderParam === 'true') {
+        const orderData = localStorage.getItem('videoOrder');
+        if (orderData) {
+          setVideoOrderData(JSON.parse(orderData));
+          setShowVideoOrder(true);
+        }
       }
+      setPlayerName(localStorage.getItem("playerName") || "Player");
+      setCurrentStats(JSON.parse(localStorage.getItem("playerStats") || "{}") || {});
     }
-  }, [searchParams]);
+  }, [router.query]);
 
   // Developer toggle for new player flow
   const clearPlayerData = () => {
-    localStorage.removeItem("playerName");
-    localStorage.removeItem("playerEmail");
-    localStorage.removeItem("playerStats");
-    localStorage.removeItem("tournamentRegistration");
-    localStorage.removeItem("videoOrder");
-    window.location.reload();
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem("playerName");
+      localStorage.removeItem("playerEmail");
+      localStorage.removeItem("playerStats");
+      localStorage.removeItem("tournamentRegistration");
+      localStorage.removeItem("videoOrder");
+      window.location.reload();
+    }
   };
-
-  // Defensive: fallback for missing/corrupt localStorage
-  let playerName = "Player";
-  let currentStats = {};
-  try {
-    playerName = localStorage.getItem("playerName") || "Player";
-    currentStats = JSON.parse(localStorage.getItem("playerStats") || "{}") || {};
-  } catch (e) {
-    console.error("Error reading player data from localStorage", e);
-    playerName = "Player";
-    currentStats = {};
-  }
 
   const recordScore = async (scoreType, reward, points) => {
     // Defensive: ensure currentStats is an object
@@ -55,7 +50,9 @@ export default function HowdWeDo() {
       lastReward: reward,
       lastDate: new Date().toLocaleDateString()
     };
-    localStorage.setItem("playerStats", JSON.stringify(updatedStats));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("playerStats", JSON.stringify(updatedStats));
+    }
 
     // If it's a birdie or hole-in-one, submit to admin portal for verification
     if (scoreType === "Birdie" || scoreType === "Hole-in-One") {
@@ -84,11 +81,11 @@ export default function HowdWeDo() {
 
     // Navigate to appropriate page
     if (scoreType === "Hole-in-One") {
-      navigate("/verify", { state: { prize: "hio", reward, points, playerName } });
+      router.push({ pathname: "/verify", query: { prize: "hio", reward, points, playerName } });
     } else if (scoreType === "Birdie") {
-      navigate("/verify", { state: { prize: "birdie", reward, points, playerName } });
+      router.push({ pathname: "/verify", query: { prize: "birdie", reward, points, playerName } });
     } else {
-      navigate("/myscorecard", { state: { prize: null, scoreType, points } });
+      router.push({ pathname: "/myscorecard", query: { prize: null, scoreType, points } });
     }
   };
 

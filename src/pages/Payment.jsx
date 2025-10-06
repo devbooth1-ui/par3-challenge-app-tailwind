@@ -9,19 +9,26 @@ export default function Payment() {
   const [cardApproved, setCardApproved] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef(null);
-  const playerName = localStorage.getItem("playerName") || "Player";
-  const firstName = playerName.split(" ")[0];
-  // Get last payment method for returning players
-  const lastPaymentMethod = localStorage.getItem("lastPaymentMethod");
-  // Get player type: if 'isReturningPlayer' is not set or false, treat as new
-  const isReturningPlayer = localStorage.getItem("isReturningPlayer") === "true";
+  const [playerName, setPlayerName] = useState("Player");
+  const [lastPaymentMethod, setLastPaymentMethod] = useState("");
+  const [isReturningPlayer, setIsReturningPlayer] = useState(false);
 
   useEffect(() => {
-    // If not a returning player, clear lastPaymentMethod
-    if (!isReturningPlayer) {
-      localStorage.removeItem("lastPaymentMethod");
+    if (typeof window !== 'undefined') {
+      setPlayerName(localStorage.getItem("playerName") || "Player");
+      setLastPaymentMethod(localStorage.getItem("lastPaymentMethod") || "");
+      setIsReturningPlayer(localStorage.getItem("isReturningPlayer") === "true");
     }
-    // Auto-select last payment method if available and returning
+  }, []);
+
+  const firstName = playerName.split(" ")[0];
+
+  useEffect(() => {
+    if (!isReturningPlayer) {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem("lastPaymentMethod");
+      }
+    }
     if (isReturningPlayer && lastPaymentMethod && !paymentMethod) {
       setPaymentMethod("same");
     }
@@ -37,9 +44,8 @@ export default function Payment() {
   }, [showVideo]);
 
   const handleSwingAway = () => {
-    // Store payment method for next time
     const selectedMethod = paymentMethod === "same" ? lastPaymentMethod : paymentMethod;
-    if (selectedMethod) {
+    if (selectedMethod && typeof window !== 'undefined') {
       localStorage.setItem("lastPaymentMethod", selectedMethod);
     }
     setShowVideo(true);
