@@ -15,3 +15,7 @@ export { default as Profile } from './Profile';
 export { default as Challenge } from './Challenge';
 export { default as OrderForm } from './OrderForm';
 export { default as ThanksForPlaying } from './ThanksForPlaying';
+
+export default function Home() {
+  return <main style={{ padding: 24 }}>Home – Par3 Admin</main>;
+}
