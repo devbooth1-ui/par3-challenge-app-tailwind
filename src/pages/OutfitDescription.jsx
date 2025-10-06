@@ -62,38 +62,7 @@ export default function OutfitDescription() {
     };
 
     try {
-      const playerPayload = {
-        name: playerName,
-        email: playerEmail,
-        phone: playerPhone,
-        stats: playerStats
-      };
-      const playerApiUrl = 'https://par3-admin1.vercel.app/api/players';
-      await fetch(playerApiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(playerPayload)
-      });
-
-      let claimResult;
-      if (prize === "hio") {
-        claimResult = await adminAPI.submitHoleInOneClaim(playerData, paymentMethod, outfit, combinedTeeTime);
-      } else {
-        claimResult = await adminAPI.submitBirdieClaim(playerData, outfit, combinedTeeTime);
-      }
-
-      console.log("🚨 CLAIM SUBMITTED TO ADMIN PORTAL:", claimResult);
-
-      if (claimResult && !claimResult.error) {
-        alert(`✅ Prize claim submitted! devbooth1@yahoo.com has been notified immediately.`);
-      } else if (claimResult && claimResult.offline) {
-        alert(`⚠️ Claim logged locally. Will sync with our team when available.`);
-      } else {
-        alert(`✅ Prize claim submitted! Company will be notified immediately.`);
-      }
-
-      alert("Your submission is under review. You will receive an email when your hole has been reviewed by our team.");
-
+      // Only send one claim to backend
       const claimData = {
         playerName,
         playerEmail,
@@ -106,21 +75,51 @@ export default function OutfitDescription() {
         points: points || 0,
         videoRef: ""
       };
-
       const apiUrl = 'https://par3-admin1.vercel.app/api/claims';
-
-      fetch(apiUrl, {
+      const claimRes = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(claimData)
-      })
-      .then(res => res.json())
-      .then(data => {
-        console.log("Claim submitted to backend:", data);
-      })
-      .catch(error => {
-        console.error("Failed to submit claim to backend:", error);
       });
+      const claimResult = await claimRes.json();
+      console.log("Claim submitted to backend:", claimResult);
+
+      // Only show offline message if claimResult.offline is true
+      if (claimResult && !claimResult.error) {
+        alert(`✅ Prize claim submitted! devbooth1@yahoo.com has been notified immediately.`);
+      } else if (claimResult && claimResult.offline) {
+        alert(`⚠️ Claim logged locally. Will sync with our team when available.`);
+      } else {
+        alert(`✅ Prize claim submitted! Company will be notified immediately.`);
+      }
+
+      alert("Your submission is under review. You will receive an email when your hole has been reviewed by our team.");
+
+      // Only send player info to backend once
+      const playerPayload = {
+        name: playerName,
+        email: playerEmail,
+        phone: playerPhone,
+        stats: playerStats
+      };
+      const playerApiUrl = 'https://par3-admin1.vercel.app/api/players';
+      try {
+        const playerRes = await fetch(playerApiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(playerPayload)
+        });
+        const playerResult = await playerRes.json();
+        console.log("Player submitted to backend:", playerResult);
+        if (playerRes.ok && playerResult && !playerResult.error) {
+          // Success
+        } else {
+          alert("Player submission failed: " + (playerResult.error || playerRes.status));
+        }
+      } catch (err) {
+        console.error("Failed to submit player to backend:", err);
+        alert("Player submission failed: " + err.message);
+      }
 
     } catch (error) {
       console.error("Failed to submit claim to admin portal:", error);
@@ -132,9 +131,9 @@ export default function OutfitDescription() {
     const isRegistered = playerStats.tournamentRegistered;
 
     if (isQualified && !isRegistered) {
-      const wantsToRegister = window.confirm(
+      const wantsToRegister = typeof window !== 'undefined' ? window.confirm(
         `🏆 CONGRATULATIONS! 🏆\n\nYou now have ${playerStats.totalPoints} points and are QUALIFIED for the $1 MILLION TOURNAMENT!\n\nWould you like to register now?`
-      );
+      ) : false;
       if (wantsToRegister) {
         router.push("/tournament-signup");
         return;
