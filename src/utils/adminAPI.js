@@ -36,29 +36,14 @@ export const adminAPI = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    to: 'devbooth1@yahoo.com',
-                    subject: '🚨 NEW BIRDIE CLAIM - Par3 Challenge',
-                    body: `
-NEW BIRDIE CLAIM SUBMITTED!
-
-Player: ${playerData.firstName} ${playerData.lastName}
-Email: ${playerData.email}
-Phone: ${playerData.phone || 'Not provided'}
-Prize: $65 Club Card + 200 Points
-
-VERIFICATION DETAILS:
-Outfit: ${outfitDescription || 'Not provided'}
-Tee Time: ${teeTime || 'Not specified'}
-Course: wentworth-gc
-Hole: 1
-Submitted: ${new Date().toLocaleString()}
-
-Please verify this claim in the admin portal immediately!
-
-Tournament Details: https://your-tournament-details-url.com
-
-Admin Portal: https://par3-admin1.vercel.app/claims
-                    `
+                    claimType: 'birdie',
+                    playerName: `${playerData.firstName} ${playerData.lastName}`,
+                    playerEmail: playerData.email || '',
+                    playerPhone: playerData.phone || '',
+                    outfitDescription: outfitDescription,
+                    teeDate: teeTime ? teeTime.split(' ')[0] : '',
+                    teeTime: teeTime ? teeTime.split(' ')[1] : '',
+                    courseName: 'Wentworth GC'
                 })
             });
 
@@ -103,29 +88,14 @@ Admin Portal: https://par3-admin1.vercel.app/claims
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    to: 'devbooth1@yahoo.com',
-                    subject: '🏆 URGENT: HOLE-IN-ONE CLAIM - Par3 Challenge',
-                    body: `
-🏆 HOLE-IN-ONE CLAIM SUBMITTED! 🏆
-
-Player: ${playerData.firstName} ${playerData.lastName}
-Email: ${playerData.email}
-Phone: ${playerData.phone || 'Not provided'}
-Prize: $1,000 CASH + Tournament Qualification
-
-VERIFICATION DETAILS:
-Outfit: ${outfitDescription || 'Not provided'}
-Tee Time: ${teeTime || 'Not specified'}
-Course: wentworth-gc
-Hole: 1
-Payment Method: ${paymentMethod}
-Submitted: ${new Date().toLocaleString()}
-
-*** URGENT VERIFICATION REQUIRED ***
-Please verify this claim in the admin portal immediately!
-
-Admin Portal: https://par3-admin1.vercel.app/claims
-                    `
+                    claimType: 'hole-in-one',
+                    playerName: `${playerData.firstName} ${playerData.lastName}`,
+                    playerEmail: playerData.email || '',
+                    playerPhone: playerData.phone || '',
+                    outfitDescription: outfitDescription,
+                    teeDate: teeTime ? teeTime.split(' ')[0] : '',
+                    teeTime: teeTime ? teeTime.split(' ')[1] : '',
+                    courseName: 'Wentworth GC'
                 })
             });
 
