@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from "react";
 import ConfettiEffect from "../components/ConfettiEffect";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import { adminAPI } from "../utils/adminAPI.js";
 
 export default function OutfitDescription() {
-  const { state } = useLocation();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [outfit, setOutfit] = useState("");
   const [teeDate, setTeeDate] = useState("");
   const [teeTime, setTeeTime] = useState("");
 
-  // Prefer playerName from navigation state, fallback to localStorage
-  const playerName = (state && state.playerName) || localStorage.getItem("playerName") || "Player";
+  // Get playerName from localStorage
+  const playerName = localStorage.getItem("playerName") || "Player";
   const firstName = playerName.split(" ")[0];
-  // Ensure proper capitalization for first name
   const capitalizedFirstName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
 
-  useEffect(() => {
-    if (!state || !state.prize) navigate("/howd-we-do", { replace: true });
-  }, [state, navigate]);
+  // Get prize and other info from query or localStorage
+  const prize = router.query.prize || localStorage.getItem("prize");
+  const courseId = router.query.courseId || localStorage.getItem("courseId") || "";
+  const hole = router.query.hole || localStorage.getItem("hole") || "";
+  const points = router.query.points || localStorage.getItem("points") || 0;
 
-  if (!state || !state.prize) return null;
+  useEffect(() => {
+    if (!prize) router.replace("/howd-we-do");
+  }, [prize, router]);
+
+  if (!prize) return null;
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -59,7 +63,7 @@ export default function OutfitDescription() {
 
       // Submit claim to admin portal with outfit and tee time
       let claimResult;
-      if (isHoleInOne) {
+      if (prize === "hio") {
         claimResult = await adminAPI.submitHoleInOneClaim(playerData, paymentMethod, outfit, combinedTeeTime);
       } else {
         claimResult = await adminAPI.submitBirdieClaim(playerData, outfit, combinedTeeTime);
@@ -83,16 +87,15 @@ export default function OutfitDescription() {
         playerName: localStorage.getItem("playerName") || "",
         playerEmail: localStorage.getItem("playerEmail") || "",
         playerPhone: localStorage.getItem("playerPhone") || "",
-        courseId: localStorage.getItem("courseId") || state.courseId || "",
-        hole: localStorage.getItem("hole") || state.hole || "",
-        claimType: state.prize === "hio" ? "hole-in-one" : "birdie",
+        courseId,
+        hole,
+        claimType: prize === "hio" ? "hole-in-one" : "birdie",
         teeTime: combinedTeeTime || "",
         outfit: outfit || "",
-        points: state.points || 0,
+        points: points || 0,
         videoRef: "" // <-- For future video support
       };
 
-      // Use local backend in development, remote in production
       const apiUrl = 'https://par3-admin1.vercel.app/api/claims';
 
       fetch(apiUrl, {
@@ -120,23 +123,22 @@ export default function OutfitDescription() {
     const isRegistered = playerStats.tournamentRegistered;
 
     if (isQualified && !isRegistered) {
-      // Show tournament signup opportunity
       const wantsToRegister = window.confirm(
         `🏆 CONGRATULATIONS! 🏆\n\nYou now have ${playerStats.totalPoints} points and are QUALIFIED for the $1 MILLION TOURNAMENT!\n\nWould you like to register now?`
       );
-
       if (wantsToRegister) {
-        navigate("/tournament-signup");
+        router.push("/tournament-signup");
         return;
       }
     }
 
-    navigate("/myscorecard", {
-      state: { prize: state.prize, outfit, teeTime: combinedTeeTime },
+    router.push({
+      pathname: "/myscorecard",
+      query: { prize, outfit, teeTime: combinedTeeTime }
     });
   };
 
-  const isHoleInOne = state.prize === "hio";
+  const isHoleInOne = prize === "hio";
   const prizeLabel = isHoleInOne ? "Hole-in-One" : "Birdie";
   const prizeAmount = isHoleInOne ? "$1,000 CASH* + Instant Qualification for the $1 Million Shoot Out" : "$65 Club Card + 200 Points";
 
@@ -153,7 +155,7 @@ export default function OutfitDescription() {
       }}
     >
       {/* Confetti for Birdie or Hole-in-Won */}
-      {(state.prize === "hio" || state.prize === "birdie") && <ConfettiEffect duration={3000} />}
+      {(prize === "hio" || prize === "birdie") && <ConfettiEffect duration={3000} />}
 
       {/* Premium overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-green-900/40 via-emerald-800/30 to-lime-700/40"></div>
