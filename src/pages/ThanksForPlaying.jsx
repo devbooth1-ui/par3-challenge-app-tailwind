@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useRouter } from "next/router";
 
 const ThanksForPlaying = () => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
   const [orderData, setOrderData] = useState(null);
-  const orderType = searchParams.get("order");
+  const orderType = router.query.order;
 
   useEffect(() => {
     if (orderType === "video") {
@@ -17,11 +16,11 @@ const ThanksForPlaying = () => {
   }, [orderType]);
 
   const handleHomeReturn = () => {
-    navigate("/");
+    router.push("/");
   };
 
   const handlePlayAgain = () => {
-    navigate("/challenge");
+    router.push("/challenge");
   };
 
   if (orderType === "video" && orderData) {
@@ -157,7 +156,7 @@ const ThanksForPlaying = () => {
                 Capture your Par3 Challenge experience forever! Professional video footage delivered via email.
               </p>
               <button
-                onClick={() => navigate('/order-form')}
+                onClick={() => router.push('/order-form')}
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg transition-all transform hover:scale-105 mb-2"
               >
                 🎥 Order Professional Video - $25.00

@@ -1,11 +1,9 @@
 import React from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 export default function Tournament() {
   const videoRef = React.useRef(null);
-
-  const location = useLocation();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   // Get player stats from localStorage for personalization
   const playerName = localStorage.getItem("playerName") || "Player";
@@ -93,7 +91,7 @@ export default function Tournament() {
             <button
               className="bg-green-600 hover:bg-green-700 text-white font-bold py-1.5 px-6 rounded-full shadow transition text-base sm:text-lg"
               style={{ fontFamily: 'Courier New, Courier, monospace' }}
-              onClick={() => navigate('/play')}
+              onClick={() => router.push('/play')}
             >
               Return to Game
             </button>
@@ -234,13 +232,13 @@ export default function Tournament() {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4">
           <button
-            onClick={() => navigate("/play")}
+            onClick={() => router.push("/play")}
             className="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all transform hover:scale-105"
           >
             Continue Playing
           </button>
           <button
-            onClick={() => navigate("/")}
+            onClick={() => router.push("/")}
             className="flex-1 bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all"
           >
             Back to Home

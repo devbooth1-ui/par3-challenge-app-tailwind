@@ -1,8 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 export default function TermsAndConditions() {
-    const navigate = useNavigate();
+    const router = useRouter();
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-slate-100 py-8 px-4">
@@ -172,7 +172,7 @@ export default function TermsAndConditions() {
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <button
-                                onClick={() => navigate(-1)}
+                                onClick={() => router.back()}
                                 className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-all"
                             >
                                 ← Back
@@ -182,7 +182,7 @@ export default function TermsAndConditions() {
                                     // Auto-accept terms when user clicks "Accept & Continue"
                                     localStorage.setItem("termsAccepted", "true");
                                     // Navigate back to login page
-                                    navigate("/login");
+                                    router.push("/login");
                                 }}
                                 className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all"
                             >

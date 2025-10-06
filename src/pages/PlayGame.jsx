@@ -1,13 +1,12 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import VideoRecordingNotice from "../components/VideoRecordingNotice";
 
 export default function PlayGame() {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   // Get player info
-  const fullName = location.state?.name || localStorage.getItem("playerName") || "Player";
+  const fullName = router.query.name || localStorage.getItem("playerName") || "Player";
   const firstName = fullName.split(" ")[0]?.charAt(0).toUpperCase() + fullName.split(" ")[0]?.slice(1).toLowerCase();
 
   // Get stats
@@ -106,19 +105,19 @@ export default function PlayGame() {
       {/* Awards Button */}
       <div className="flex flex-col items-center gap-1 mb-2 w-full max-w-xs">
         <button
-          onClick={() => navigate("/awards")}
+          onClick={() => router.push("/awards")}
           className="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-4 rounded-full shadow transition w-full"
         >
           See Awards
         </button>
         <button
-          onClick={() => navigate("/tournament")}
+          onClick={() => router.push("/tournament")}
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full shadow transition w-full"
         >
           Tournament Details & Updates
         </button>
         <button
-          onClick={() => navigate("/payment")}
+          onClick={() => router.push("/payment")}
           className="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-4 rounded-full shadow transition w-full"
         >
           TEE IT UP!

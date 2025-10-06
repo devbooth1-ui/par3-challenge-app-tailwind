@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 export default function PromoDriver() {
-    const navigate = useNavigate();
+    const router = useRouter();
 
 
     // Go to home page as soon as the video ends
     const handleEnded = () => {
-        navigate("/home");
+        router.push("/home");
     };
 
     return (

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import StripeDemoForm from "../assets/StripeDemoForm";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 
 export default function Payment() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState("");
   const [cardApproved, setCardApproved] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
@@ -48,7 +48,7 @@ export default function Payment() {
   // When video ends, go to teeoff page
   const handleVideoEnd = () => {
     setShowVideo(false);
-    navigate("/teeoff");
+    router.push("/teeoff");
   };
 
   return (

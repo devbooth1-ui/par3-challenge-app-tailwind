@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import VideoRecordingNotice from "../components/VideoRecordingNotice";
 
 export default function TeeOff() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/howd-we-do");
+      router.push("/howd-we-do");
     }, 6000);
     return () => clearTimeout(timer);
-  }, [navigate]);
+  }, [router]);
 
   return (
     <div

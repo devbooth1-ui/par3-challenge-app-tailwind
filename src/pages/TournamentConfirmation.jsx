@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 export default function TournamentConfirmation() {
-    const navigate = useNavigate();
+    const router = useRouter();
     const [registrationData, setRegistrationData] = useState(null);
 
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem("tournamentRegistration") || "null");
         if (!data) {
-            navigate("/tournament-signup");
+            router.push("/tournament-signup");
             return;
         }
         setRegistrationData(data);
-    }, [navigate]);
+    }, [router]);
 
     if (!registrationData) {
         return <div>Loading...</div>;
@@ -161,14 +161,14 @@ export default function TournamentConfirmation() {
 
                         <div className="space-x-4">
                             <button
-                                onClick={() => navigate("/play")}
+                                onClick={() => router.push("/play")}
                                 className="bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold py-3 px-6 rounded-xl hover:from-green-600 hover:to-emerald-600 transform hover:scale-105 transition-all duration-300"
                             >
                                 Continue Playing for More Points
                             </button>
 
                             <button
-                                onClick={() => navigate("/myscorecard")}
+                                onClick={() => router.push("/myscorecard")}
                                 className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold py-3 px-6 rounded-xl hover:from-blue-600 hover:to-indigo-600 transform hover:scale-105 transition-all duration-300"
                             >
                                 View My Scorecard

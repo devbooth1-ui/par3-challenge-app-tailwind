@@ -1,16 +1,16 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import VideoRecordingNotice from "../components/VideoRecordingNotice";
 
 export default function TapIn() {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleTap = () => {
     const user = localStorage.getItem("par3User");
     if (user) {
-      navigate("/returning");
+      router.push("/returning");
     } else {
-      navigate("/login");
+      router.push("/login");
     }
   };
 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 export default function Payment() {
-    const navigate = useNavigate();
+    const router = useRouter();
     const [paymentMethod, setPaymentMethod] = useState("");
     const [showQRScanner, setShowQRScanner] = useState(false);
     const [showTapToPay, setShowTapToPay] = useState(false);
@@ -23,7 +23,7 @@ export default function Payment() {
 
     const handleSwingAway = () => {
         // Immediately go to scoring page
-        navigate("/howd-we-do");
+        router.push("/howd-we-do");
     };
 
     const handlePayment = () => {
@@ -44,7 +44,7 @@ export default function Payment() {
         // Simulate payment processing
         setTimeout(() => {
             // After payment, go to scoring page
-            navigate("/howd-we-do");
+            router.push("/howd-we-do");
         }, 1500);
     };
 
@@ -287,7 +287,7 @@ export default function Payment() {
                 {/* Action Buttons */}
                 <div className="flex flex-col gap-4">
                     <button
-                        onClick={() => navigate("/play")}
+                        onClick={() => router.push("/play")}
                         className="bg-slate-600 bg-opacity-60 hover:bg-slate-700 text-white font-semibold py-3 px-8 rounded-full transition-all w-full border border-white border-opacity-40"
                     >
                         ← Back to Game

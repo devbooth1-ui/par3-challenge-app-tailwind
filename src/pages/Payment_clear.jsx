@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 export default function Payment() {
-    const navigate = useNavigate();
+    const router = useRouter();
     const [paymentMethod, setPaymentMethod] = useState("");
     const playerName = localStorage.getItem("playerName") || "Player";
     const firstName = playerName.split(" ")[0];
 
     const handleSwingAway = () => {
-        // Immediately go to scoring page
-        navigate("/howd-we-do");
+        router.push("/howd-we-do");
     };
 
     return (
@@ -113,7 +112,7 @@ export default function Payment() {
                 {/* Action Buttons */}
                 <div className="flex flex-col gap-4">
                     <button
-                        onClick={() => navigate("/play")}
+                        onClick={() => router.push("/play")}
                         className="bg-slate-600 bg-opacity-60 hover:bg-slate-700 text-white font-semibold py-3 px-8 rounded-full transition-all w-full border border-white border-opacity-40"
                     >
                         ← Back to Game

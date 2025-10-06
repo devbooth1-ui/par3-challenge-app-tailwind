@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 export default function VideoTransition() {
-    const navigate = useNavigate();
+    const router = useRouter();
     const videoRef = useRef(null);
 
     useEffect(() => {
@@ -13,7 +13,7 @@ export default function VideoTransition() {
 
             // When video ends, go to HowdWeDo page
             const handleVideoEnd = () => {
-                navigate("/howd-we-do");
+                router.push("/howd-we-do");
             };
 
             video.addEventListener("ended", handleVideoEnd);
@@ -23,7 +23,7 @@ export default function VideoTransition() {
                 video.removeEventListener("ended", handleVideoEnd);
             };
         }
-    }, [navigate]);
+    }, [router]);
 
     return (
         <div className="min-h-screen bg-black flex items-center justify-center overflow-hidden">
@@ -35,7 +35,7 @@ export default function VideoTransition() {
                 onError={(e) => {
                     console.error("Video error:", e);
                     // If video fails, go to HowdWeDo anyway after 3 seconds
-                    setTimeout(() => navigate("/howd-we-do"), 3000);
+                    setTimeout(() => router.push("/howd-we-do"), 3000);
                 }}
             >
                 <source src="/driver-nosound-mp4.mp4" type="video/mp4" />

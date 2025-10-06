@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 export default function Payment() {
-    const navigate = useNavigate();
+    const router = useRouter();
     const [paymentMethod, setPaymentMethod] = useState("");
     const playerName = localStorage.getItem("playerName") || "Player";
     const firstName = playerName.split(" ")[0];
 
     const handleSwingAway = () => {
-        navigate("/howd-we-do");
+        router.push("/howd-we-do");
     };
 
     return (

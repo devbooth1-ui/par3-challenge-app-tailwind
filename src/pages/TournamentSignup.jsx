@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ConfettiEffect from "../components/ConfettiEffect";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import { notifyTournamentRegistration } from "../utils/notificationService";
 
 export default function TournamentSignup() {
-    const navigate = useNavigate();
+    const router = useRouter();
     const [form, setForm] = useState({
         name: "",
         email: "",
@@ -87,7 +87,7 @@ export default function TournamentSignup() {
         sendPlayerConfirmationEmail(tournamentData);
         sendCompanyNotificationEmail(tournamentData);
 
-        setTimeout(() => navigate("/play"), 3000);
+        setTimeout(() => router.push("/play"), 3000);
     };
 
     const sendPlayerConfirmationEmail = async (tournamentData) => {

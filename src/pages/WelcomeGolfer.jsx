@@ -1,8 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 export default function WelcomeGolfer() {
-    const navigate = useNavigate();
+    const router = useRouter();
     return (
         <div
             className="min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden"
@@ -40,7 +40,7 @@ export default function WelcomeGolfer() {
             </div>
             <div className="flex flex-col items-center gap-4">
                 <button
-                    onClick={() => navigate('/login')}
+                    onClick={() => router.push('/login')}
                     className="bg-gradient-to-r from-lime-500 to-green-600 text-white font-bold py-3 px-8 rounded-xl text-xl shadow-lg hover:from-lime-600 hover:to-green-700 transition-all duration-200"
                 >
                     Tee Off Now

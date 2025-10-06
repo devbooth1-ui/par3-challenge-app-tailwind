@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 
 export default function ReturningPlayer() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [playerName, setPlayerName] = useState("");
   const [email, setEmail] = useState("");
   const [recognized, setRecognized] = useState(false);
@@ -220,7 +220,7 @@ export default function ReturningPlayer() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {/* Play Again */}
             <button
-              onClick={() => navigate("/play")}
+              onClick={() => router.push("/play")}
               className="group bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 text-white font-bold py-6 px-6 rounded-xl hover:from-green-600 hover:via-emerald-600 hover:to-teal-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               <div className="text-4xl mb-2 group-hover:animate-bounce">🏌️‍♂️</div>
@@ -231,7 +231,7 @@ export default function ReturningPlayer() {
             {/* Tournament Signup (if qualified) */}
             {playerStats.tournamentQualified && !playerStats.tournamentRegistered && (
               <button
-                onClick={() => navigate("/tournament-signup")}
+                onClick={() => router.push("/tournament-signup")}
                 className="group bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 text-white font-bold py-6 px-6 rounded-xl hover:from-yellow-600 hover:via-orange-600 hover:to-red-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 <div className="text-4xl mb-2 group-hover:animate-pulse">🏆</div>
@@ -242,7 +242,7 @@ export default function ReturningPlayer() {
 
             {/* My Scorecard */}
             <button
-              onClick={() => navigate("/myscorecard")}
+              onClick={() => router.push("/myscorecard")}
               className="group bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 text-white font-bold py-6 px-6 rounded-xl hover:from-blue-600 hover:via-indigo-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               <div className="text-4xl mb-2 group-hover:animate-spin">📊</div>
