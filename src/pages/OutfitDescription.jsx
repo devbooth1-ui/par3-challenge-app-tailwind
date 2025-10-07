@@ -104,7 +104,9 @@ export default function OutfitDescription() {
         name: playerName,
         email: playerEmail,
         phone: playerPhone,
-        stats: playerStats
+        stats: playerStats,
+        claim: claimData, // send the claim just submitted
+        courseId // send the courseId if available
       };
       const playerApiUrl = 'https://par3-admin1.vercel.app/api/players';
       try {

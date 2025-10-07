@@ -30,7 +30,7 @@ export default function Login() {
     setName(formattedName);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!agreeToTerms) {
       alert("Please agree to the terms and conditions to continue.");
@@ -41,8 +41,9 @@ export default function Login() {
       localStorage.setItem("playerEmail", email);
       localStorage.setItem("playerPhone", phone);
       const existingStats = localStorage.getItem("playerStats");
+      let stats;
       if (!existingStats) {
-        const initialStats = {
+        stats = {
           lastRound: "Par",
           totalRounds: 0,
           bestScore: 99,
@@ -51,9 +52,32 @@ export default function Login() {
           lastDate: new Date().toLocaleDateString(),
           holeInOneQualified: false
         };
-        localStorage.setItem("playerStats", JSON.stringify(initialStats));
+        localStorage.setItem("playerStats", JSON.stringify(stats));
+        // Send player info to backend
+        await fetch('https://par3-admin1.vercel.app/api/players', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            email,
+            phone,
+            stats
+          })
+        });
         router.push("/awards");
       } else {
+        stats = JSON.parse(existingStats);
+        // Send player info to backend
+        await fetch('https://par3-admin1.vercel.app/api/players', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            email,
+            phone,
+            stats
+          })
+        });
         router.push("/play");
       }
     }
@@ -64,9 +88,9 @@ export default function Login() {
       className="min-h-screen flex flex-col flex-1 items-center bg-cover bg-center px-2 min-h-0 relative pt-0 overflow-hidden"
       style={{ backgroundImage: 'url(/golf-bg.jpg)' }}
     >
-      <VideoRecordingNotice 
-        position="top-right" 
-        autoHide={false} 
+      <VideoRecordingNotice
+        position="top-right"
+        autoHide={false}
         variant="login"
         isReturningPlayer={isReturningPlayer}
       />
@@ -135,7 +159,7 @@ export default function Login() {
             pattern="[0-9\-\+\(\) ]*"
             required
           />
-          
+
           {/* Terms and Conditions Checkbox */}
           <div className="w-full mt-3 mb-2">
             <label className="flex items-start gap-3 cursor-pointer">
@@ -148,7 +172,7 @@ export default function Login() {
               />
               <div className="text-sm text-white leading-relaxed">
                 <span>I agree to the </span>
-                <button 
+                <button
                   type="button"
                   className="underline text-lime-300 hover:text-lime-200"
                   onClick={() => router.push('/terms')}
@@ -159,14 +183,13 @@ export default function Login() {
               </div>
             </label>
           </div>
-          
+
           <button
             type="submit"
-            className={`text-white text-lg font-bold py-2 px-6 rounded-full shadow-lg transition w-full mt-1 flex flex-col items-center gap-1 ${
-              agreeToTerms 
-                ? "bg-lime-700 hover:bg-lime-800" 
+            className={`text-white text-lg font-bold py-2 px-6 rounded-full shadow-lg transition w-full mt-1 flex flex-col items-center gap-1 ${agreeToTerms
+                ? "bg-lime-700 hover:bg-lime-800"
                 : "bg-gray-500 cursor-not-allowed"
-            }`}
+              }`}
             disabled={!agreeToTerms}
           >
             <span className="flex justify-center items-center gap-1">
