@@ -1,1 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[44],{7099:function(n,_,u){(window.__NEXT_P=window.__NEXT_P||[]).push(["/MyScorecard",function(){return u(7422)}])},1163:function(n,_,u){n.exports=u(3079)}},function(n){n.O(0,[422,888,774,179],function(){return n(n.s=7099)}),_N_E=n.O()}]);
