@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Link from 'next/link';
 
 // Example mapping: coordinates to course/hole info
 const COURSE_MAP = [
@@ -167,6 +168,17 @@ export default function Home() {
 					</div>
 				</div>
 			</div>
+
+			{/* Navigation Menu */}
+			<nav className="flex flex-wrap gap-4 justify-center mt-8">
+				<Link href="/Login" className="px-4 py-2 bg-emerald-500 text-white rounded">Login</Link>
+				<Link href="/OrderForm" className="px-4 py-2 bg-yellow-500 text-white rounded">Order Form</Link>
+				<Link href="/Payment_broken" className="px-4 py-2 bg-red-500 text-white rounded">Payment</Link>
+				<Link href="/Leaderboard" className="px-4 py-2 bg-blue-500 text-white rounded">Leaderboard</Link>
+				<Link href="/Awards" className="px-4 py-2 bg-purple-500 text-white rounded">Awards</Link>
+				<Link href="/Challenge" className="px-4 py-2 bg-pink-500 text-white rounded">Challenge</Link>
+				<Link href="/HowdWeDo" className="px-4 py-2 bg-gray-700 text-white rounded">How'd We Do</Link>
+			</nav>
 
 			{/* Shot Verification at Bottom */}
 			<div className="fixed bottom-0 left-0 right-0 z-20 bg-emerald-900/90 backdrop-blur-md border-t border-emerald-400/30 p-1 sm:p-2">
