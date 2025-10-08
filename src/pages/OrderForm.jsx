@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { notifyVideoOrder } from "../assets/utils/notificationService.js";
 
 export default function OrderForm() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     playerName: "",
     email: "",
@@ -14,23 +14,21 @@ export default function OrderForm() {
   const [cardApproved, setCardApproved] = useState(false);
 
   // Get last payment method for returning players
-  const lastPaymentMethod = typeof window !== 'undefined' ? localStorage.getItem("lastPaymentMethod") : null;
-  const isReturningPlayer = typeof window !== 'undefined' ? localStorage.getItem("isReturningPlayer") === "true" : false;
+  const lastPaymentMethod = localStorage.getItem("lastPaymentMethod");
+  const isReturningPlayer = localStorage.getItem("isReturningPlayer") === "true";
 
   // Populate form with existing player data
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const playerName = localStorage.getItem("playerName") || "";
-      const playerEmail = localStorage.getItem("playerEmail") || "";
-      const playerPhone = localStorage.getItem("playerPhone") || "";
-      
-      setFormData(prev => ({
-        ...prev,
-        playerName,
-        email: playerEmail,
-        phone: playerPhone
-      }));
-    }
+    const playerName = localStorage.getItem("playerName") || "";
+    const playerEmail = localStorage.getItem("playerEmail") || "";
+    const playerPhone = localStorage.getItem("playerPhone") || "";
+    
+    setFormData(prev => ({
+      ...prev,
+      playerName,
+      email: playerEmail,
+      phone: playerPhone
+    }));
   }, []);
 
   const handleInputChange = (e) => {
@@ -69,9 +67,9 @@ export default function OrderForm() {
       status: "confirmed",
       orderType: "video"
     };
-    if (typeof window !== 'undefined') {
-      localStorage.setItem("videoOrder", JSON.stringify(orderData));
-    }
+
+    // Store order data
+    localStorage.setItem("videoOrder", JSON.stringify(orderData));
 
     // Send notification using the notification service
     try {
@@ -91,7 +89,7 @@ export default function OrderForm() {
     alert("🎥 Video order confirmed! Your professional Par3 Challenge video will be delivered within 24 hours via email. Thank you!");
     
     // Navigate back to regular farewell page
-    router.push("/thanks-for-playing");
+    navigate("/thanks-for-playing");
   };
 
   const sendOrderNotification = async (orderData) => {
@@ -114,9 +112,7 @@ Note: Video will be delivered via email attachment to customer's email address.`
     };
 
     // Store for demonstration (in production, this would send actual email)
-    if (typeof window !== 'undefined') {
-      localStorage.setItem("lastNotification", JSON.stringify(notification));
-    }
+    localStorage.setItem("lastNotification", JSON.stringify(notification));
     console.log("Order notification sent to devbooth1@yahoo.com and video@par3challenge.com", notification);
   };
 
@@ -137,9 +133,7 @@ Thank you for playing Par3 Challenge!`,
       timestamp: new Date().toISOString()
     };
 
-    if (typeof window !== 'undefined') {
-      localStorage.setItem("lastCustomerConfirmation", JSON.stringify(confirmation));
-    }
+    localStorage.setItem("lastCustomerConfirmation", JSON.stringify(confirmation));
     console.log("Customer confirmation sent", confirmation);
   };
 
@@ -343,7 +337,7 @@ Thank you for playing Par3 Challenge!`,
           {/* Back Button - Smaller */}
           <button
             type="button"
-            onClick={() => router.back()}
+            onClick={() => navigate(-1)}
             className="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition-all text-sm"
           >
             ← Back

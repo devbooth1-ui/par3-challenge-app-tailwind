@@ -17,5 +17,5 @@ export { default as OrderForm } from './OrderForm';
 export { default as ThanksForPlaying } from './ThanksForPlaying';
 
 export default function Home() {
-  return <main style={{ padding: 24 }}>Home – Par3 Admin</main>;
+    return <main style={{ padding: 24 }}>Home – Par3 Admin</main>;
 }
