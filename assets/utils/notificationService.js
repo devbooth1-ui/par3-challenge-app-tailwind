@@ -37,4 +37,21 @@ Verification Details:
 - Date: ${teeDate}
 - Time: ${teeTime}
 - Submitted: ${timestamp}
+`;
+
+    // Send notification to company emails
+    await Promise.all([
+        sendEmail(PRIMARY_EMAIL, `Immediate Prize Claim Notification`, message),
+        sendEmail(AWARDS_EMAIL, `Immediate Prize Claim Notification`, message),
+        sendEmail(REGISTRATION_EMAIL, `Immediate Prize Claim Notification`, message),
+        sendEmail(VIDEO_EMAIL, `Immediate Prize Claim Notification`, message)
+    ]);
+};
+
+// Mock email sending function (to be replaced with real implementation)
+const sendEmail = async (to, subject, body) => {
+    console.log(`Sending email to: ${to}`);
+    console.log(`Subject: ${subject}`);
+    console.log(`Body: ${body}`);
+};
 
