@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import VideoRecordingNotice from '../../components/VideoRecordingNotice';
+import VideoRecordingNotice from "../../components/VideoRecordingNotice";
 
 export default function TapIn() {
   const router = useRouter();
@@ -15,7 +15,10 @@ export default function TapIn() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center overflow-hidden" style={{ backgroundImage: 'url(/golf-bg.jpg)' }}>
+    <div
+      className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center overflow-hidden"
+      style={{ backgroundImage: 'url(/golf-bg.jpg)' }}
+    >
       <VideoRecordingNotice position="top-right" autoHide={false} />
       <button
         onClick={handleTap}

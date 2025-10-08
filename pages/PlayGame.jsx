@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import StripeDemoForm from '../../assets/StripeDemoForm';
-import VideoRecordingNotice from '../../components/VideoRecordingNotice';
+import StripeDemoForm from "../../assets/StripeDemoForm";
+import VideoRecordingNotice from "../../components/VideoRecordingNotice";
 
 export default function PlayGame() {
   const router = useRouter();
