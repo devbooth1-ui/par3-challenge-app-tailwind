@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { motion } from "framer-motion";
 import { notifyVideoOrder } from "../assets/utils/notificationService.js";
 
 export default function OrderForm() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     playerName: "",
     email: "",
@@ -89,7 +90,7 @@ export default function OrderForm() {
     alert("🎥 Video order confirmed! Your professional Par3 Challenge video will be delivered within 24 hours via email. Thank you!");
     
     // Navigate back to regular farewell page
-    navigate("/thanks-for-playing");
+    router.push("/thanks-for-playing");
   };
 
   const sendOrderNotification = async (orderData) => {
@@ -337,7 +338,7 @@ Thank you for playing Par3 Challenge!`,
           {/* Back Button - Smaller */}
           <button
             type="button"
-            onClick={() => navigate(-1)}
+            onClick={() => router.push('/')}
             className="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition-all text-sm"
           >
             ← Back

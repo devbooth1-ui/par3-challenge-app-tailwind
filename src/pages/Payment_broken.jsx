@@ -113,7 +113,7 @@ export default function Payment() {
                 {/* Action Buttons */}
                 <div className="flex flex-col gap-4">
                     <button
-                        onClick={() => navigate("/play")}
+                        onClick={() => router.push("/play")}
                         className="bg-slate-600 bg-opacity-60 hover:bg-slate-700 text-white font-semibold py-3 px-8 rounded-full transition-all w-full border border-white border-opacity-40"
                     >
                         ← Back to Game
