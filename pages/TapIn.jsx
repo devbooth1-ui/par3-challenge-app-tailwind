@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import VideoRecordingNotice from "../components/VideoRecordingNotice";
+import VideoRecordingNotice from '../../components/VideoRecordingNotice';
 
 export default function TapIn() {
   const router = useRouter();

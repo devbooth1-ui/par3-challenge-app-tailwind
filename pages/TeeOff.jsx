@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
-import VideoRecordingNotice from "../components/VideoRecordingNotice";
+import VideoRecordingNotice from '../../components/VideoRecordingNotice';
 
 export default function TeeOff() {
   const router = useRouter();
