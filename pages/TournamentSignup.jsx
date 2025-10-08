@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ConfettiEffect from "../components/ConfettiEffect";
 import { useRouter } from "next/router";
-import { notifyTournamentRegistration } from "../utils/notificationService";
+import { notifyTournamentRegistration } from "../src/utils/notificationService";
 
 export default function TournamentSignup() {
     const router = useRouter();
