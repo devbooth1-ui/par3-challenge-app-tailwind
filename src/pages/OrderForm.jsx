@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { notifyVideoOrder } from "../assets/utils/notificationService.js";
 
 export default function OrderForm() {
+  if (typeof window === 'undefined') return null; // <-- guard: no SSR use of localStorage
+
   const router = useRouter();
   const [formData, setFormData] = useState({
     playerName: "",
