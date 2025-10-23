@@ -40,3 +40,4 @@ working-admin/
 # Track the Vite app subfolder (was ignored by a wildcard)
 !par3-challenge-app-tailwind/
 !par3-challenge-app-tailwind/**
+.env
