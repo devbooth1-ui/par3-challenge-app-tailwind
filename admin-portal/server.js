@@ -4,13 +4,21 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const QRCode = require('qrcode');
+const nodemailer = require('nodemailer');
 
 const app = express();
-const PORT = 5000;
+const PORT = 3000;
 const JWT_SECRET = 'par3-admin-secret-key-2024';
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: [
+        'http://localhost:5173', // Vite dev
+        'https://par3-challenge-app-tailwind.vercel.app', // Vercel prod
+        'https://par3-admin1.vercel.app' // Admin portal prod
+    ],
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.static('public'));
 
@@ -28,6 +36,20 @@ let claims = [];
 let courses = [
     { id: 'wentworth-gc', name: 'Wentworth Golf Club', location: 'Surrey, UK' }
 ];
+
+let players = [
+    { id: 1, name: 'John Doe', email: 'john@example.com' },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com' }
+];
+
+// Nodemailer setup (replace with your real credentials)
+const transporter = nodemailer.createTransport({
+    service: 'yahoo',
+    auth: {
+        user: 'devbooth1@yahoo.com',
+        pass: 'Reagan0622!'
+    }
+});
 
 // Authentication middleware
 const authenticateToken = (req, res, next) => {
@@ -80,6 +102,21 @@ app.post('/api/claims/webhook', (req, res) => {
     claims.push(claim);
     console.log('New claim received:', claim);
 
+    // Send email notification
+    const mailOptions = {
+        from: 'devbooth1@yahoo.com',
+        to: 'admin@par3challenge.com',
+        subject: 'New Award Claim Submitted',
+        text: `A new claim has been submitted:\n${JSON.stringify(claim, null, 2)}`
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending email:', error);
+        } else {
+            console.log('Email sent:', info.response);
+        }
+    });
+
     res.json({
         success: true,
         claim_id: claim.id,
@@ -90,6 +127,13 @@ app.post('/api/claims/webhook', (req, res) => {
 // Get all claims
 app.get('/api/claims', authenticateToken, (req, res) => {
     res.json(claims);
+});
+
+// Get all claims for a specific player (by email)
+app.get('/api/players/:email/claims', authenticateToken, (req, res) => {
+    const { email } = req.params;
+    const playerClaims = claims.filter(c => c.email === email || c.playerEmail === email);
+    res.json(playerClaims);
 });
 
 // Update claim status
@@ -124,6 +168,26 @@ app.patch('/api/claims/:id', authenticateToken, async (req, res) => {
 // Get courses
 app.get('/api/courses', authenticateToken, (req, res) => {
     res.json(courses);
+});
+
+// Get all players
+app.get('/api/players', authenticateToken, (req, res) => {
+    res.json(players);
+});
+
+// Add a new player
+app.post('/api/players', authenticateToken, (req, res) => {
+    const { name, email } = req.body;
+    if (!name || !email) {
+        return res.status(400).json({ error: 'Name and email required' });
+    }
+    const newPlayer = {
+        id: Date.now(),
+        name,
+        email
+    };
+    players.push(newPlayer);
+    res.json(newPlayer);
 });
 
 // Serve admin dashboard

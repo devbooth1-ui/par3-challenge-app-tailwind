@@ -1,7 +1,11 @@
 // API Configuration for connecting to admin services
+<<<<<<< HEAD
 const ADMIN_API_BASE = process.env.NODE_ENV === 'production'
     ? 'https://par3-admin1.vercel.app' // <-- your actual Vercel admin portal URL
     : 'http://localhost:3001';
+=======
+const ADMIN_API_BASE = 'https://par3-admin1.vercel.app';
+>>>>>>> eedddd5894fbec3c6d580f78da077f4a3c0ebc63
 
 // API functions for admin communication
 export const adminAPI = {
@@ -38,6 +42,7 @@ export const adminAPI = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+<<<<<<< HEAD
                     to: 'devbooth1@yahoo.com',
                     subject: '🚨 NEW BIRDIE CLAIM - Par3 Challenge',
                     body: `
@@ -59,6 +64,16 @@ Please verify this claim in the admin portal immediately!
 
 Admin Portal: https://par3-admin1.vercel.app/claims
                     `
+=======
+                    claimType: 'birdie',
+                    playerName: `${playerData.firstName} ${playerData.lastName}`,
+                    playerEmail: playerData.email || '',
+                    playerPhone: playerData.phone || '',
+                    outfitDescription: outfitDescription,
+                    teeDate: teeTime ? teeTime.split(' ')[0] : '',
+                    teeTime: teeTime ? teeTime.split(' ')[1] : '',
+                    courseName: 'Wentworth GC'
+>>>>>>> eedddd5894fbec3c6d580f78da077f4a3c0ebc63
                 })
             });
 
@@ -103,6 +118,7 @@ Admin Portal: https://par3-admin1.vercel.app/claims
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+<<<<<<< HEAD
                     to: 'devbooth1@yahoo.com',
                     subject: '🏆 URGENT: HOLE-IN-ONE CLAIM - Par3 Challenge',
                     body: `
@@ -126,6 +142,16 @@ Please verify this claim in the admin portal immediately!
 
 Admin Portal: https://par3-admin1.vercel.app/claims
                     `
+=======
+                    claimType: 'hole-in-one',
+                    playerName: `${playerData.firstName} ${playerData.lastName}`,
+                    playerEmail: playerData.email || '',
+                    playerPhone: playerData.phone || '',
+                    outfitDescription: outfitDescription,
+                    teeDate: teeTime ? teeTime.split(' ')[0] : '',
+                    teeTime: teeTime ? teeTime.split(' ')[1] : '',
+                    courseName: 'Wentworth GC'
+>>>>>>> eedddd5894fbec3c6d580f78da077f4a3c0ebc63
                 })
             });
 

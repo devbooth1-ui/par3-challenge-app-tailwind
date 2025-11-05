@@ -1,6 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import VideoRecordingNotice from "../components/VideoRecordingNotice";
 
 export default function Login() {
   const navigate = useNavigate();

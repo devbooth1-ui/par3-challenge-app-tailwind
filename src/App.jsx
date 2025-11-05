@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
@@ -59,6 +59,7 @@ export default function App() {
       <Route path="/terms" element={<TermsAndConditions />} />
       <Route path="/admin" element={<AdminPortal />} />
       <Route path="/test-claims" element={<TestClaims />} />
+      <Route path="/standings" element={<Navigate to="/leaderboard" replace />} />
     </Routes>
   );
 }
