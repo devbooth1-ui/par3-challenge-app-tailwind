@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 
 // Example mapping: coordinates to course/hole info
 const COURSE_MAP = [
@@ -28,7 +27,6 @@ function getCourseInfo(lat, lng) {
 }
 
 export default function Home() {
-	const router = useRouter();
 	// Developer toggle for new player flow
 	const clearPlayerData = () => {
 		if (typeof window !== "undefined") {
@@ -37,16 +35,6 @@ export default function Home() {
 			localStorage.removeItem("playerStats");
 			localStorage.removeItem("tournamentRegistration");
 			window.location.reload();
-		}
-	};
-	const handleTap = () => {
-		if (typeof window !== "undefined") {
-			const savedName = localStorage.getItem("playerName");
-			if (savedName && savedName.trim() !== "") {
-				router.push("/play");
-			} else {
-				router.push("/login");
-			}
 		}
 	};
 
