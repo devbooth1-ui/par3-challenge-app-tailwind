@@ -1,6 +1,7 @@
 import React from 'react'
-import { Routes, Route, Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Routes, Route, Link } from 'react-router-dom'
 
+import Home from './pages/Home.jsx'
 import TeeOff from './pages/TeeOff.jsx'
 import PlayGame from './pages/PlayGame.jsx'
 import HowdWeDo from './pages/HowdWeDo.jsx'
@@ -14,14 +15,12 @@ import TermsAndConditions from './pages/TermsAndConditions.jsx'
 import ThanksForPlaying from './pages/ThanksForPlaying.jsx'
 import Tournament from './pages/Tournament.jsx'
 import TournamentSignup from './pages/TournamentSignup.jsx'
-
-/* Only include Leaderboard if the file exists; you created it earlier. */
 import Leaderboard from './pages/Leaderboard.jsx'
 
 export default function App() {
   return (
     <div className="min-h-screen bg-white">
-      <header className="p-4 border-b flex items-center gap-4">
+      <header className="p-4 border-b flex items-center gap-4 bg-white/90 z-30 relative">
         <Link to="/" className="font-semibold">Par3 Challenge</Link>
         <nav className="flex gap-3 text-sm">
           <Link to="/play">Play Game</Link>
@@ -31,9 +30,10 @@ export default function App() {
         </nav>
       </header>
 
-      <main className="p-4">
+      <main className="p-0">
         <Routes>
-          <Route path="/" element={<TeeOff />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/teeoff" element={<TeeOff />} />
           <Route path="/play" element={<PlayGame />} />
           <Route path="/howd-we-do" element={<HowdWeDo />} />
           <Route path="/payment" element={<Payment />} />
