@@ -1,12 +1,11 @@
-# never commit env or local build junk
-.env
-.env.*
-.env.production
-!.env.example
 .vercel
-.next
-dist
-node_modules
+node_modules/
+# build/cache
+node_modules/
+dist/
+.vite/
+.vercel/
+.DS_Store
 
 # junk/backup you don't want tracked
 par3-challenge-recovered/
@@ -41,3 +40,4 @@ working-admin/
 # Track the Vite app subfolder (was ignored by a wildcard)
 !par3-challenge-app-tailwind/
 !par3-challenge-app-tailwind/**
+.env

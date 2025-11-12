@@ -1,167 +1,29 @@
-// API Configuration for connecting to admin services
-<<<<<<< HEAD
-const ADMIN_API_BASE = process.env.NODE_ENV === 'production'
-    ? 'https://par3-admin1.vercel.app' // <-- your actual Vercel admin portal URL
-    : 'http://localhost:3001';
-=======
-const ADMIN_API_BASE = 'https://par3-admin1.vercel.app';
->>>>>>> eedddd5894fbec3c6d580f78da077f4a3c0ebc63
+// src/utils/adminAPI.js
+const API_BASE = import.meta.env.VITE_ADMIN_API_URL || '';
 
-// API functions for admin communication
-export const adminAPI = {
-    // Submit birdie claim to admin portal
-    submitBirdieClaim: async (playerData, outfitDescription = '', teeTime = '') => {
-        try {
-            const response = await fetch(`${ADMIN_API_BASE}/api/claims`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    claimType: 'birdie',
-                    playerName: `${playerData.firstName} ${playerData.lastName}`,
-                    playerEmail: playerData.email || '',
-                    playerPhone: playerData.phone || '',
-                    outfitDescription: outfitDescription,
-                    teeTime: teeTime,
-                    courseId: 'wentworth-gc',
-                    hole: '1',
-                    paymentMethod: 'card'
-                })
-            });
+async function fetchJSON(path, opts = {}) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    headers: { 'Content-Type': 'application/json' },
+    ...opts,
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`API ${res.status}: ${text || res.statusText}`);
+  }
+  return res.json().catch(() => ({}));
+}
 
-            if (!response.ok) {
-                throw new Error(`Failed to submit claim: ${response.status}`);
-            }
+export const getPlayers = () => fetchJSON('/api/players');
+export const addPlayer = (payload) =>
+  fetchJSON('/api/players', { method: 'POST', body: JSON.stringify(payload) });
 
-            const result = await response.json();
-            console.log('🚨 BIRDIE CLAIM SUBMITTED:', result);
+export const getClaims = () => fetchJSON('/api/claims');
+export const createClaim = (payload) =>
+  fetchJSON('/api/claims', { method: 'POST', body: JSON.stringify(payload) });
 
-            // Also send immediate email notification
-            await fetch(`${ADMIN_API_BASE}/api/send-email`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-<<<<<<< HEAD
-                    to: 'devbooth1@yahoo.com',
-                    subject: '🚨 NEW BIRDIE CLAIM - Par3 Challenge',
-                    body: `
-NEW BIRDIE CLAIM SUBMITTED!
+export const createPaymentIntent = (amount = 800) =>
+  fetchJSON('/api/payments', { method: 'POST', body: JSON.stringify({ amount }) });
 
-Player: ${playerData.firstName} ${playerData.lastName}
-Email: ${playerData.email}
-Phone: ${playerData.phone || 'Not provided'}
-Prize: $65 Club Card + 200 Points
+export default { getPlayers, addPlayer, getClaims, createClaim, createPaymentIntent };
 
-VERIFICATION DETAILS:
-Outfit: ${outfitDescription || 'Not provided'}
-Tee Time: ${teeTime || 'Not specified'}
-Course: wentworth-gc
-Hole: 1
-Submitted: ${new Date().toLocaleString()}
-
-Please verify this claim in the admin portal immediately!
-
-Admin Portal: https://par3-admin1.vercel.app/claims
-                    `
-=======
-                    claimType: 'birdie',
-                    playerName: `${playerData.firstName} ${playerData.lastName}`,
-                    playerEmail: playerData.email || '',
-                    playerPhone: playerData.phone || '',
-                    outfitDescription: outfitDescription,
-                    teeDate: teeTime ? teeTime.split(' ')[0] : '',
-                    teeTime: teeTime ? teeTime.split(' ')[1] : '',
-                    courseName: 'Wentworth GC'
->>>>>>> eedddd5894fbec3c6d580f78da077f4a3c0ebc63
-                })
-            });
-
-            return result;
-        } catch (error) {
-            console.error('Failed to submit birdie claim:', error);
-            // Don't break the app if admin portal is down
-            return { error: error.message, offline: true };
-        }
-    },
-
-    // Submit hole-in-one claim to admin portal
-    submitHoleInOneClaim: async (playerData, paymentMethod, outfitDescription = '', teeTime = '') => {
-        try {
-            const response = await fetch(`${ADMIN_API_BASE}/api/claims`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    claimType: 'hole_in_one',
-                    playerName: `${playerData.firstName} ${playerData.lastName}`,
-                    playerEmail: playerData.email || '',
-                    playerPhone: playerData.phone || '',
-                    outfitDescription: outfitDescription,
-                    teeTime: teeTime,
-                    courseId: 'wentworth-gc',
-                    hole: '1',
-                    paymentMethod: paymentMethod || 'card'
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to submit hole-in-one claim: ${response.status}`);
-            }
-
-            const result = await response.json();
-            console.log('🚨 HOLE-IN-ONE CLAIM SUBMITTED:', result);
-
-            // Also send immediate email notification
-            await fetch(`${ADMIN_API_BASE}/api/send-email`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-<<<<<<< HEAD
-                    to: 'devbooth1@yahoo.com',
-                    subject: '🏆 URGENT: HOLE-IN-ONE CLAIM - Par3 Challenge',
-                    body: `
-🏆 HOLE-IN-ONE CLAIM SUBMITTED! 🏆
-
-Player: ${playerData.firstName} ${playerData.lastName}
-Email: ${playerData.email}
-Phone: ${playerData.phone || 'Not provided'}
-Prize: $1,000 CASH + Tournament Qualification
-
-VERIFICATION DETAILS:
-Outfit: ${outfitDescription || 'Not provided'}
-Tee Time: ${teeTime || 'Not specified'}
-Course: wentworth-gc
-Hole: 1
-Payment Method: ${paymentMethod}
-Submitted: ${new Date().toLocaleString()}
-
-*** URGENT VERIFICATION REQUIRED ***
-Please verify this claim in the admin portal immediately!
-
-Admin Portal: https://par3-admin1.vercel.app/claims
-                    `
-=======
-                    claimType: 'hole-in-one',
-                    playerName: `${playerData.firstName} ${playerData.lastName}`,
-                    playerEmail: playerData.email || '',
-                    playerPhone: playerData.phone || '',
-                    outfitDescription: outfitDescription,
-                    teeDate: teeTime ? teeTime.split(' ')[0] : '',
-                    teeTime: teeTime ? teeTime.split(' ')[1] : '',
-                    courseName: 'Wentworth GC'
->>>>>>> eedddd5894fbec3c6d580f78da077f4a3c0ebc63
-                })
-            });
-
-            return result;
-        } catch (error) {
-            console.error('Failed to submit hole-in-one claim:', error);
-            // Don't break the app if admin portal is down
-            return { error: error.message, offline: true };
-        }
-    }
-};
-
-export default adminAPI;
+export const adminAPI = { getPlayers, addPlayer, getClaims, createClaim, createPaymentIntent };

@@ -53,7 +53,7 @@ export default function OrderForm() {
             type="text"
             name="course"
             className="w-full border rounded px-3 py-2"
-            placeholder="Wentworth GC – Par 3 Challenge"
+            placeholder="Wentworth GC – Par3 Challenge"
           />
         </div>
 
