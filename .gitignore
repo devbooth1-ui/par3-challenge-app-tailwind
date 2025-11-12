@@ -1,6 +1,7 @@
 # never commit env or local build junk
 .env
 .env.*
+.env.production
 !.env.example
 .vercel
 .next
