@@ -1,3 +1,5 @@
+// Stripe payment page – wired to real backend. Do not revert to simulated version.
+
 import React, { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import {
